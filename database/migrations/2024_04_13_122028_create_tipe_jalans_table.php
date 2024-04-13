@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('username');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->enum('role', ['admin', 'pemohon', 'kasi', 'kabid', 'kadis']);
-            $table->rememberToken();
+        Schema::create('tipe_jalans', function (Blueprint $table) {
+            $table->id();
+            $table->foreignUuid('jenis_jalan_id')->references('id')->on('jenis_jalans')->onDelete('cascade');
+            $table->string('tipe');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('tipe_jalans');
     }
 };

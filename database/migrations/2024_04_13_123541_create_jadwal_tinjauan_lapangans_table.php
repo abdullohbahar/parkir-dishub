@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('username');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->enum('role', ['admin', 'pemohon', 'kasi', 'kabid', 'kadis']);
-            $table->rememberToken();
+        Schema::create('jadwal_tinjauan_lapangans', function (Blueprint $table) {
+            $table->id();
+            $table->foreignUuid('pengajuan_id')->references('id')->on('pengajuans')->onDelete('cascade');
+            $table->date('tanggal');
+            $table->text('tempat');
+            $table->boolean('is_review')->default(0);
+            $table->date('deadline');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('jadwal_tinjauan_lapangans');
     }
 };
