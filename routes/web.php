@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AuthController::class, 'index'])->name('login');
+Route::post('auth', [AuthController::class, 'authenticate'])->name('authenticate');
+
+// keycloak
+Route::get('/login', [AuthController::class, 'redirectToKeycloak'])->name('login.keycloak');
+Route::get('/callback', [AuthController::class, 'handleKeycloakCallback'])->name('keycloak.callback');
+Route::get('/logout', [AuthController::class, 'logout'])->name('keycloak.logout');
