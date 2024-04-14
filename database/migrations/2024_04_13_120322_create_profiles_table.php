@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('nama');
-            $table->string('no_ktp', 17);
+            $table->string('no_ktp', 17)->nullable();
             $table->text('alamat')->nullable();
             $table->string('no_telepon', 15)->nullable();
             $table->string('agama', 15)->nullable();
