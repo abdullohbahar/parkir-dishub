@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\MasterJenisPengajuanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pemohon\DashboardPemohonController;
+use App\Http\Controllers\Profile\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +28,7 @@ Route::get('/callback', [AuthController::class, 'handleKeycloakCallback'])->name
 Route::get('/logout', [AuthController::class, 'logout'])->name('keycloak.logout');
 
 // admin
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('check.profile')->group(function () {
     Route::get('dashboard', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
 
     Route::resource('parkir', MasterJenisPengajuanController::class)->only('index');
@@ -35,6 +36,8 @@ Route::prefix('admin')->group(function () {
 });
 
 
-Route::prefix('pemohon')->group(function () {
+Route::prefix('pemohon')->middleware('check.profile')->group(function () {
     Route::get('dashboard', [DashboardPemohonController::class, 'index'])->name('pemohon.dashboard');
 });
+
+Route::resource('profile', ProfileController::class)->only('index', 'edit', 'update');

@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\V3\KeycloakService;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
-use App\Services\V3\KeycloakService;
 
 
 class AuthController extends Controller
@@ -41,15 +42,6 @@ class AuthController extends Controller
                     break;
                 case 'admin':
                     return redirect()->route('admin.dashboard');
-                    break;
-                case 'penilai1':
-                    return redirect()->route('penilai.dashboard');
-                    break;
-                case 'penilai2':
-                    return redirect()->route('penilai.dashboard');
-                    break;
-                case 'penilai3':
-                    return redirect()->route('penilai.dashboard');
                     break;
                 case 'kasi':
                     return redirect()->route('kasi.dashboard');
@@ -90,9 +82,9 @@ class AuthController extends Controller
 
         if ($existingUser == null) {
             User::create([
-                'username' => $user->name ?? 'default',
+                'username' => Str::slug($user->name) ?? '-',
                 'email' => $user->email,
-                'role' => '-'
+                'role' => 'pemohon'
             ]);
         }
 

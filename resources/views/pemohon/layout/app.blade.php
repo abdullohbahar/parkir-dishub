@@ -240,8 +240,8 @@ License: For each use you must have a valid license purchased only from above li
                                         <!--begin:Menu link-->
                                         <div class="menu-item">
                                             <!--begin:Menu link-->
-                                            <a class="menu-link {{ Route::is('admin.dashboard') ? 'active' : '' }}"
-                                                href="{{ route('admin.dashboard') }}">
+                                            <a class="menu-link {{ Route::is('pemohon.dashboard') ? 'active' : '' }}"
+                                                href="{{ route('pemohon.dashboard') }}">
                                                 <span class="menu-icon">
                                                     <i class="ki-duotone ki-element-11 fs-2">
                                                         <span class="path1"></span>
@@ -262,6 +262,17 @@ License: For each use you must have a valid license purchased only from above li
                                                     <i class="fas fa-th"></i>
                                                 </span>
                                                 <span class="menu-title">Pengajuan Permohonan</span>
+                                            </a>
+                                            <!--end:Menu link-->
+                                        </div>
+                                        <div class="menu-item">
+                                            <!--begin:Menu link-->
+                                            <a class="menu-link {{ Request::is('profile*') ? 'active' : '' }}"
+                                                href="{{ route('profile.index') }}">
+                                                <span class="menu-icon">
+                                                    <i class="fas fa-user"></i>
+                                                </span>
+                                                <span class="menu-title">Profile</span>
                                             </a>
                                             <!--end:Menu link-->
                                         </div>
