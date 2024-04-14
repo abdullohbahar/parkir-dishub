@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardAdminController;
-use App\Http\Controllers\Admin\MasterDataParkirController;
+use App\Http\Controllers\Admin\MasterJenisPengajuanController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,5 +28,5 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('keycloak.logout'
 Route::prefix('admin')->group(function () {
     Route::get('dashboard', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
 
-    Route::resource('parkir', MasterDataParkirController::class);
+    Route::resource('parkir', MasterJenisPengajuanController::class);
 });

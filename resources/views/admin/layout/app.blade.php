@@ -261,7 +261,7 @@ License: For each use you must have a valid license purchased only from above li
                                                 <span class="menu-icon">
                                                     <i class="fas fa-th"></i>
                                                 </span>
-                                                <span class="menu-title">Master Data Parkir</span>
+                                                <span class="menu-title">Master Jenis Pengajuan</span>
                                             </a>
                                             <!--end:Menu link-->
                                         </div>
