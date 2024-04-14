@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('pengajuans', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignUuid('jenis_jalan_id')->references('id')->on('jenis_jalans')->onDelete('cascade');
+            $table->foreignUuid('jenis_pengajuan_id')->references('id')->on('jenis_pengajuans')->onDelete('cascade');
+            $table->foreignUuid('tipe_pengajuan_id')->references('id')->on('tipe_pengajuans')->onDelete('cascade');
             $table->text('lokasi_pengelolaan_parkir');
             $table->text('alamat_lokasi_parkir');
             $table->string('panjang');

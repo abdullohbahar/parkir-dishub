@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('jenis_jalans', function (Blueprint $table) {
+        Schema::create('tipe_pengajuans', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('jenis');
+            $table->foreignUuid('jenis_pengajuan_id')->references('id')->on('jenis_pengajuans')->onDelete('cascade');
+            $table->string('tipe');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jenis_jalans');
+        Schema::dropIfExists('tipe_pengajuans');
     }
 };

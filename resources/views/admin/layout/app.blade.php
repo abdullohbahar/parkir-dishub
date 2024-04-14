@@ -240,7 +240,7 @@ License: For each use you must have a valid license purchased only from above li
                                         <!--begin:Menu link-->
                                         <div class="menu-item">
                                             <!--begin:Menu link-->
-                                            <a class="menu-link {{ $active == 'dashboard' ? 'active' : '' }}"
+                                            <a class="menu-link {{ Route::is('admin.dashboard') ? 'active' : '' }}"
                                                 href="{{ route('admin.dashboard') }}">
                                                 <span class="menu-icon">
                                                     <i class="ki-duotone ki-element-11 fs-2">
@@ -251,6 +251,17 @@ License: For each use you must have a valid license purchased only from above li
                                                     </i>
                                                 </span>
                                                 <span class="menu-title">Dashboard</span>
+                                            </a>
+                                            <!--end:Menu link-->
+                                        </div>
+                                        <div class="menu-item">
+                                            <!--begin:Menu link-->
+                                            <a class="menu-link {{ Request::is('admin/parkir*') ? 'active' : '' }}"
+                                                href="{{ route('parkir.index') }}">
+                                                <span class="menu-icon">
+                                                    <i class="fas fa-th"></i>
+                                                </span>
+                                                <span class="menu-title">Master Data Parkir</span>
                                             </a>
                                             <!--end:Menu link-->
                                         </div>
