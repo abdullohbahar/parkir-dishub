@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,8 @@ Route::post('auth', [AuthController::class, 'authenticate'])->name('authenticate
 Route::get('/login', [AuthController::class, 'redirectToKeycloak'])->name('login.keycloak');
 Route::get('/callback', [AuthController::class, 'handleKeycloakCallback'])->name('keycloak.callback');
 Route::get('/logout', [AuthController::class, 'logout'])->name('keycloak.logout');
+
+// admin
+Route::prefix('admin')->group(function () {
+    Route::get('dashboard', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
+});
