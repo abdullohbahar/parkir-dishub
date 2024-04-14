@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\MasterJenisPengajuanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Pemohon\DashboardPemohonController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,4 +32,9 @@ Route::prefix('admin')->group(function () {
 
     Route::resource('parkir', MasterJenisPengajuanController::class)->only('index');
     Route::resource('user', UserController::class)->only('index', 'create', 'store');
+});
+
+
+Route::prefix('pemohon')->group(function () {
+    Route::get('dashboard', [DashboardPemohonController::class, 'index'])->name('pemohon.dashboard');
 });
