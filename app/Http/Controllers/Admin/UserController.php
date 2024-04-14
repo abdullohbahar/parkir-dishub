@@ -45,7 +45,19 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('admin.user.create');
+        $user = new User();
+
+        $kasi = $user->where('role', 'kasi')->exists();
+        $kabid = $user->where('role', 'kabid')->exists();
+        $kadis = $user->where('role', 'kadis')->exists();
+
+        $data = [
+            'kasi' => $kasi,
+            'kabid' => $kabid,
+            'kadis' => $kadis
+        ];
+
+        return view('admin.user.create', $data);
     }
 
     public function store(Request $request)
