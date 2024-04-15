@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class JenisPengajuan extends Model
@@ -19,5 +20,10 @@ class JenisPengajuan extends Model
     public function hasManyTipePengajuan(): HasMany
     {
         return $this->hasMany(TipePengajuan::class);
+    }
+
+    public function belongsToPengajuan(): BelongsTo
+    {
+        return $this->belongsTo(Pengajuan::class);
     }
 }

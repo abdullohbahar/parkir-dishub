@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\MasterJenisPengajuanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pemohon\DashboardPemohonController;
+use App\Http\Controllers\Pemohon\PengajuanPermohonanController;
 use App\Http\Controllers\Profile\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,10 @@ Route::prefix('admin')->middleware('check.profile')->group(function () {
 
 Route::prefix('pemohon')->middleware('check.profile')->group(function () {
     Route::get('dashboard', [DashboardPemohonController::class, 'index'])->name('pemohon.dashboard');
+
+    Route::prefix('permohonan')->group(function () {
+        Route::get('/', [PengajuanPermohonanController::class, 'index'])->name('pemohon.pengajuan.permohonan');
+    });
 });
 
 Route::resource('profile', ProfileController::class)->only('index', 'edit', 'update');

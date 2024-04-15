@@ -21,4 +21,9 @@ class TipePengajuan extends Model
     {
         return $this->belongsTo(JenisPengajuan::class);
     }
+
+    public function belongsToPengajuan(): BelongsTo
+    {
+        return $this->belongsTo(Pengajuan::class);
+    }
 }

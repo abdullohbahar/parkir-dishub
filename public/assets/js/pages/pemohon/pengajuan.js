@@ -4,7 +4,7 @@ $.ajaxSetup({
     },
 });
 
-var currentUrl = "/pengajuan";
+var currentUrl = "/pemohon/permohonan";
 
 // Class definition
 var KTDatatablesServerSide = (function () {
@@ -44,11 +44,6 @@ var KTDatatablesServerSide = (function () {
                     orderable: true,
                     data: "jenis",
                     name: "jenis",
-                },
-                {
-                    orderable: true,
-                    data: "proyek",
-                    name: "proyek",
                 },
                 {
                     orderable: true,
