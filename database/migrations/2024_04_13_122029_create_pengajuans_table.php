@@ -18,13 +18,13 @@ return new class extends Migration
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignUuid('jenis_pengajuan_id')->references('id')->on('jenis_pengajuans')->onDelete('cascade');
             $table->foreignUuid('tipe_pengajuan_id')->references('id')->on('tipe_pengajuans')->onDelete('cascade');
-            $table->text('lokasi_pengelolaan_parkir');
-            $table->text('alamat_lokasi_parkir');
-            $table->string('panjang');
-            $table->string('luas');
-            $table->string('longitude');
-            $table->string('latitude');
-            $table->enum('status', ['Input Data', 'Proses Verifikasi', 'Tolak', 'Selesai']);
+            $table->text('lokasi_pengelolaan_parkir')->nullable();
+            $table->text('alamat_lokasi_parkir')->nullable();
+            $table->string('panjang')->nullable();
+            $table->string('luas')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('latitude')->nullable();
+            $table->enum('status', ['Input Data Pengajuan', 'Proses Verifikasi', 'Tolak', 'Selesai']);
             $table->timestamps();
         });
     }

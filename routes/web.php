@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\MasterJenisPengajuanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pemohon\DashboardPemohonController;
+use App\Http\Controllers\Pemohon\Pengajuan\InputDataPermohonanController;
+use App\Http\Controllers\Pemohon\Pengajuan\PilihJenisPengajuanController;
 use App\Http\Controllers\Pemohon\PengajuanPermohonanController;
 use App\Http\Controllers\Profile\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +44,17 @@ Route::prefix('pemohon')->middleware('check.profile')->group(function () {
 
     Route::prefix('permohonan')->group(function () {
         Route::get('/', [PengajuanPermohonanController::class, 'index'])->name('pemohon.pengajuan.permohonan');
+
+        Route::prefix('pilih-jenis-pengajuan')->group(function () {
+            Route::get('/', [PilihJenisPengajuanController::class, 'index'])->name('pemohon.pilih.jenis.pengajuan');
+            Route::post('/store', [PilihJenisPengajuanController::class, 'store'])->name('pemohon.store.jenis.pengajuan');
+
+            Route::get('/get-tipe-pengajuan/{jenisPengajuanID}', [PilihJenisPengajuanController::class, 'getTipePengajuan'])->name('pemohon.get.tipe.pengajuan');
+        });
+
+        Route::prefix('input-data-permohonan')->group(function () {
+            Route::get('/{pengajuanID}', [InputDataPermohonanController::class, 'index'])->name('pemohon.input.data.permohonan');
+        });
     });
 });
 

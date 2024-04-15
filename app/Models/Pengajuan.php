@@ -14,7 +14,8 @@ class Pengajuan extends Model
     protected $fillable = [
         'id',
         'user_id',
-        'jenis_jalan_id',
+        'jenis_pengajuan_id',
+        'tipe_pengajuan_id',
         'lokasi_pengelolaan_parkir',
         'alamat_lokasi_parkir',
         'panjang',
@@ -37,5 +38,10 @@ class Pengajuan extends Model
     public function hasOneTipePengajuan(): HasOne
     {
         return $this->hasOne(TipePengajuan::class);
+    }
+
+    public function hasOneRiwayatPengajuan(): HasOne
+    {
+        return $this->hasOne(RiwayatPengajuan::class);
     }
 }

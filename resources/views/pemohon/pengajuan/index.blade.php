@@ -52,10 +52,10 @@
                             <div class="card-header pt-5">
                                 <h1>Pengajuan</h1>
                                 <div class="card-toolbar">
-                                    {{-- <a href="{{ route('pemohon.pilih.tipe.pengajuan') }}" class="btn btn-success">
+                                    <a href="{{ route('pemohon.pilih.jenis.pengajuan') }}" class="btn btn-success">
                                         <i class="fas fa-plus"></i>
                                         Buat Pengajuan Baru
-                                    </a> --}}
+                                    </a>
                                 </div>
                             </div>
                             <div class="card-body" style="overflow-y: visible">
@@ -63,7 +63,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Jenis Permohonan</th>
+                                            <th>Jenis Pengajuan</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
