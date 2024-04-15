@@ -27,7 +27,7 @@ class Pengajuan extends Model
 
     public function hasOnePemohon(): HasOne
     {
-        return $this->hasOne(User::class);
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     public function hasOneJenisPengajuan(): HasOne

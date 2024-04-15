@@ -54,6 +54,7 @@ Route::prefix('pemohon')->middleware('check.profile')->group(function () {
 
         Route::prefix('input-data-permohonan')->group(function () {
             Route::get('/{pengajuanID}', [InputDataPermohonanController::class, 'index'])->name('pemohon.input.data.permohonan');
+            Route::post('store/{pengajuanID}', [InputDataPermohonanController::class, 'store'])->name('pemohon.store.data.permohonan');
         });
     });
 });

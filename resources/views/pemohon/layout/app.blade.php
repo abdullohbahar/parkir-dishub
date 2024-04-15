@@ -46,6 +46,10 @@ License: For each use you must have a valid license purchased only from above li
         .ck-content {
             height: 600px !important;
         }
+
+        .invalid-feedback {
+            text-transform: capitalize;
+        }
     </style>
 
     <title>
