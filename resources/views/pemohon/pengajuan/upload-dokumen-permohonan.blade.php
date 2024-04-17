@@ -89,7 +89,8 @@
                                             @csrf
                                             <input type="hidden" name="pengajuan_id" value="{{ $pengajuanID }}">
                                             <label for="" class="form-label">
-                                                <a href="" class="btn btn-info btn-sm">Unduh
+                                                <a href="{{ route('pemohon.download.surat.permohonan', $pengajuanID) }}"
+                                                    class="btn btn-info btn-sm">Unduh
                                                     Template
                                                     Surat Permohonan</a> <br>
                                                 Surat Permohonan

@@ -123,6 +123,16 @@ class UploadDokumenPengajuanController extends Controller
 
         $pdf = PDF::loadView('pemohon.pengajuan.template.template-surat-permohonan', $data);
 
-        return $pdf->stream('Surat Permohonan.pdf');
+        return $pdf;
+    }
+
+    public function streamSuratPermohonan($pengajuanID)
+    {
+        return $this->templateSuratPermohonan($pengajuanID)->stream('Surat Permohonan.pdf');
+    }
+
+    public function downloadSuratPermohonan($pengajuanID)
+    {
+        return $this->templateSuratPermohonan($pengajuanID)->download('Surat Permohonan.pdf');
     }
 }
