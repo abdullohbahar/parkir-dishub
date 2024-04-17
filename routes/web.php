@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pemohon\DashboardPemohonController;
 use App\Http\Controllers\Pemohon\Pengajuan\InputDataPermohonanController;
 use App\Http\Controllers\Pemohon\Pengajuan\PilihJenisPengajuanController;
+use App\Http\Controllers\Pemohon\Pengajuan\UploadDokumenPengajuanController;
 use App\Http\Controllers\Pemohon\PengajuanPermohonanController;
 use App\Http\Controllers\Profile\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,13 @@ Route::prefix('pemohon')->middleware('check.profile')->group(function () {
         Route::prefix('input-data-permohonan')->group(function () {
             Route::get('/{pengajuanID}', [InputDataPermohonanController::class, 'index'])->name('pemohon.input.data.permohonan');
             Route::post('store/{pengajuanID}', [InputDataPermohonanController::class, 'store'])->name('pemohon.store.data.permohonan');
+        });
+
+        Route::prefix('upload-dokumen-permohonan')->group(function () {
+            Route::get('/{pengajuanID}', [UploadDokumenPengajuanController::class, 'index'])->name('pemohon.upload.dokumen.pengajuan');
+            Route::post('store/{pengajuanID}', [UploadDokumenPengajuanController::class, 'uploadDokumen'])->name('pemohon.store.dokumen.pengajuan');
+            Route::post('next/{pengajuanID}', [UploadDokumenPengajuanController::class, 'next'])->name('pemohon.next.dokumen.pengajuan');
+            Route::get('menunggu-verifikasi-admin/{pengajuanID}', [UploadDokumenPengajuanController::class, 'waitVerification'])->name('pemohon.wait.verification.dokumen.pengajuan');
         });
     });
 });

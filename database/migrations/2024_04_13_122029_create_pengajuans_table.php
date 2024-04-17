@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('luas')->nullable();
             $table->string('longitude')->nullable();
             $table->string('latitude')->nullable();
-            $table->enum('status', ['Input Data Pengajuan', 'Proses Verifikasi', 'Tolak', 'Selesai']);
+            $table->enum('status', ['Input Data Pengajuan', 'Proses Verifikasi Admin', 'Proses Permohonan', 'Tolak', 'Selesai']);
             $table->timestamps();
         });
     }

@@ -32,12 +32,12 @@ class Pengajuan extends Model
 
     public function hasOneJenisPengajuan(): HasOne
     {
-        return $this->hasOne(JenisPengajuan::class);
+        return $this->hasOne(JenisPengajuan::class, 'id', 'jenis_pengajuan_id');
     }
 
     public function hasOneTipePengajuan(): HasOne
     {
-        return $this->hasOne(TipePengajuan::class);
+        return $this->hasOne(TipePengajuan::class, 'id', 'tipe_pengajuan_id');
     }
 
     public function hasOneRiwayatPengajuan(): HasOne

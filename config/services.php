@@ -38,4 +38,6 @@ return [
         'realms' => env('KEYCLOAK_REALM')         // Specify your keycloak realm
     ],
 
+
+
 ];

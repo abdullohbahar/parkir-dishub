@@ -50,8 +50,6 @@ class InputDataPermohonanController extends Controller
             'step' => 'Upload Dokumen Pengajuan'
         ]);
 
-        echo "berhasil";
-
-        // membuat halaman untuk upload dokmen permohonan
+        return to_route('pemohon.upload.dokumen.pengajuan', $pengajuanID)->with('success', 'Berhasil');
     }
 }

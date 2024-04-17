@@ -21,7 +21,7 @@ class PengajuanPermohonanController extends Controller
             // return $query;
             return Datatables::of($query)
                 ->addColumn('jenis', function ($item) {
-                    return $item->hasOneJenisPengajuan?->jenis . "($item->hasOneTipePengajuan?->tipe)" ?? '';
+                    return $item->hasOneJenisPengajuan?->jenis . ' (' . $item->hasOneTipePengajuan?->tipe . ')' ?? '';
                 })
                 ->addColumn('status', function ($item) {
                     if ($item->status == 'Tolak') {
@@ -30,7 +30,9 @@ class PengajuanPermohonanController extends Controller
                         $color = 'info';
                     } else if ($item->status == 'Selesai') {
                         $color = 'success';
-                    } else if ($item->status == 'Input Data') {
+                    } else if ($item->status == 'Input Data Pengajuan') {
+                        $color = 'secondary';
+                    } else {
                         $color = 'secondary';
                     }
 
