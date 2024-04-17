@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
@@ -22,4 +23,9 @@ class Profile extends Model
         'tempat_lahir',
         'tanggal_lahir'
     ];
+
+    public function getTtlAttribute()
+    {
+        return $this->attributes['tempat_lahir'] . ', ' . Carbon::parse($this->attributes['tanggal_lahir'])->format('d-m-Y');
+    }
 }

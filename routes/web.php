@@ -63,6 +63,8 @@ Route::prefix('pemohon')->middleware('check.profile')->group(function () {
             Route::post('store/{pengajuanID}', [UploadDokumenPengajuanController::class, 'uploadDokumen'])->name('pemohon.store.dokumen.pengajuan');
             Route::post('next/{pengajuanID}', [UploadDokumenPengajuanController::class, 'next'])->name('pemohon.next.dokumen.pengajuan');
             Route::get('menunggu-verifikasi-admin/{pengajuanID}', [UploadDokumenPengajuanController::class, 'waitVerification'])->name('pemohon.wait.verification.dokumen.pengajuan');
+
+            Route::get('template-surat-permohonan/{pengajuanID}', [UploadDokumenPengajuanController::class, 'templateSuratPermohonan'])->name('pemohon.template.surat.permohonan');
         });
     });
 });

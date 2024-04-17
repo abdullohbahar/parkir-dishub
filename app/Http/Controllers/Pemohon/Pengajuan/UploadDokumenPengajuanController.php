@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\DokumenPengajuan;
 use App\Models\RiwayatPengajuan;
 use App\Http\Controllers\Controller;
+use PDF;
 
 class UploadDokumenPengajuanController extends Controller
 {
@@ -110,7 +111,18 @@ class UploadDokumenPengajuanController extends Controller
     public function waitVerification($pengajuanID)
     {
         return view('pemohon.pengajuan.menunggu-verifikasi-dokumen-admin');
+    }
 
-        // membuat halaman menunggu verifikasi dan mengirim pesan ke admin
+    public function templateSuratPermohonan($pengajuanID)
+    {
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile', 'hasOneJenisPengajuan', 'hasOneTipePengajuan')->findorfail($pengajuanID);
+
+        $data = [
+            'pengajuan' => $pengajuan
+        ];
+
+        $pdf = PDF::loadView('pemohon.pengajuan.template.template-surat-permohonan', $data);
+
+        return $pdf->stream('Surat Permohonan.pdf');
     }
 }
