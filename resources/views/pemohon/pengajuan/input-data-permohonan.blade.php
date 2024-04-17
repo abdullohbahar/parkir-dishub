@@ -147,14 +147,15 @@
                                         <div class="col-12 mt-3">
                                             <label for="" class="form-label">Alamat Lokasi Parkir</label>
                                             <textarea name="alamat_lokasi_parkir" class="form-control @error('alamat_lokasi_parkir') is-invalid @enderror"
-                                                style="width: 100%" rows="2"></textarea>
+                                                style="width: 100%" rows="2">{{ old('alamat_lokasi_parkir') }}</textarea>
                                             @error('alamat_lokasi_parkir')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3"
+                                            {{ $pengajuan->hasOneJenisPengajuan->jenis == 'Tepi Jalan' ? '' : 'hidden' }}>
                                             <label for="" class="form-label">Panjang</label>
                                             <input type="text" name="panjang"
                                                 class="form-control @error('panjang') is-invalid @enderror"
@@ -165,7 +166,8 @@
                                                 </div>
                                             @enderror
                                         </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3"
+                                            {{ $pengajuan->hasOneJenisPengajuan->jenis == 'Khusus Parkir' ? '' : 'hidden' }}>
                                             <label for="" class="form-label">Luas</label>
                                             <input type="text" name="luas"
                                                 class="form-control @error('luas') is-invalid @enderror"

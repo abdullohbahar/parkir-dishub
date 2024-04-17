@@ -10,7 +10,7 @@ class InputDataPermohonanController extends Controller
 {
     public function index($pengajuanID)
     {
-        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findorfail($pengajuanID);
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile', 'hasOneJenisPengajuan')->findorfail($pengajuanID);
 
         $data = [
             'pengajuan' => $pengajuan
@@ -25,18 +25,27 @@ class InputDataPermohonanController extends Controller
             'longitude' => 'required',
             'latitude' => 'required',
             'alamat_lokasi_parkir' => 'required',
-            'panjang' => 'required',
-            'luas' => 'required',
         ], [
             'longitude.required' => 'longitude harus diisi',
             'latitiude.required' => 'latitiude harus diisi',
             'alamat_lokasi_parkir.required' => 'alamat lokasi parkir harus diisi',
-            'panjang.required' => 'panjang harus diisi',
-            'luas.required' => 'luas harus diisi',
         ]);
 
-        $pengajuan = Pengajuan::where('id', $pengajuanID)->first();
+        $pengajuan = Pengajuan::with('hasOneJenisPengajuan')->where('id', $pengajuanID)->first();
 
+        if ($pengajuan->hasOneJenisPengajuan->jenis == 'Tepi Jalan') {
+            $request->validate([
+                'panjang' => 'required',
+            ], [
+                'panjang.required' => 'panjang harus diisi',
+            ]);
+        } else if ($pengajuan->hasOneJenisPengajuan->jenis == 'Khusus Parkir') {
+            $request->validate([
+                'luas' => 'required',
+            ], [
+                'luas.required' => 'luas harus diisi',
+            ]);
+        }
 
         $pengajuan->update([
             'longitude' => $request->longitude,
