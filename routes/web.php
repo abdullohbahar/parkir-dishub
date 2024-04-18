@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\DataPengajuanController;
 use App\Http\Controllers\Admin\MasterJenisPengajuanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
@@ -37,6 +38,10 @@ Route::prefix('admin')->middleware('check.profile')->group(function () {
 
     Route::resource('parkir', MasterJenisPengajuanController::class)->only('index');
     Route::resource('user', UserController::class)->only('index', 'create', 'store');
+
+    Route::prefix('permohonan')->group(function () {
+        Route::get('/', [DataPengajuanController::class, 'index'])->name('admin.data.permohonan');
+    });
 });
 
 

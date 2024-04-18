@@ -4,7 +4,7 @@ $.ajaxSetup({
     },
 });
 
-var currentUrl = "/admin/pengajuan";
+var currentUrl = window.location.href;
 
 // Class definition
 var KTDatatablesServerSide = (function () {
@@ -42,18 +42,13 @@ var KTDatatablesServerSide = (function () {
                 },
                 {
                     orderable: true,
-                    data: "nama",
-                    name: "nama",
+                    data: "pemohon",
+                    name: "pemohon",
                 },
                 {
                     orderable: true,
                     data: "jenis",
                     name: "jenis",
-                },
-                {
-                    orderable: true,
-                    data: "proyek",
-                    name: "proyek",
                 },
                 {
                     orderable: true,
