@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DataTables;
 
-class DataPengajuanController extends Controller
+class PengajuanAdminController extends Controller
 {
     public function index(Request $request)
     {
@@ -43,15 +43,15 @@ class DataPengajuanController extends Controller
                 })
                 ->addColumn('aksi', function ($item) {
 
-                    if ($item->status != 'input data belum selesai') {
-                        $detailBtn = "<a href='/pengajuan/andalalin/detail/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
+                    if ($item->status != 'Input Data Pengajuan') {
+                        $detailBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
                         // if ($item->hasOneRiwayatInputData->step == 'Selesai') {
                         //     $verifikasiBtn = '';
                         // } else {
-                        $verifikasiBtn = "<a href='/pengajuan/andalalin/riwayat-input-data/$item->id' class='btn btn-warning btn-sm'>Aktivitas Permohonan</a>";
+                        $verifikasiBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-warning btn-sm'>Aktivitas Permohonan</a>";
                         // }
                     } else {
-                        $detailBtn = "<a href='/pengajuan/andalalin/riwayat-input-data/$item->id' class='btn btn-info btn-sm'>Lanjutkan Mengisi Data</a>";
+                        $detailBtn = "Harap Menunggu Pemohon Melakukan Input Data Pengajuan";
                         $verifikasiBtn = '';
                     }
 
@@ -73,5 +73,50 @@ class DataPengajuanController extends Controller
         ];
 
         return view('admin.pengajuan.index', $data);
+    }
+
+    public function redirect($pengajuanID)
+    {
+        $pengajuan = Pengajuan::with('hasOneRiwayatVerifikasi')->findOrFail($pengajuanID);
+
+        if ($pengajuan->status == 'Proses Verifikasi Admin') {
+            return to_route('admin.verifikasi.dokumen', $pengajuanID);
+        }
+    }
+
+    public function verifikasiDokumen($pengajuanID)
+    {
+        $this->redirect($pengajuanID);
+
+        $pengajuan = Pengajuan::with('hasOnePemohon', 'hasOneJenisPengajuan', 'hasOneTipePengajuan', 'hasManyDokumenPengajuan')->findorfail($pengajuanID);
+
+        $status = $pengajuan->hasManyDokumenPengajuan->pluck('status')
+            ->toArray();
+
+        $filteredArray = array_filter($status, function ($value) {
+            return !is_null($value);
+        });
+
+        if (empty($filteredArray)) {
+            // semua nilai array null
+            $rejectButton = '';
+            $nextButton = 'hidden';
+        } elseif (count($filteredArray) === count($status)) {
+            // Semua nilai dalam array tidak null
+            $nextButton = '';
+            $rejectButton = 'hidden';
+        } else {
+            // Ada nilai yang tidak null dalam array
+            $rejectButton = 'hidden';
+            $nextButton = 'hidden';
+        }
+
+        $data = [
+            'pengajuan' => $pengajuan,
+            'rejectButton' => $rejectButton,
+            'nextButton' => $nextButton
+        ];
+
+        return view('admin.pengajuan.verifikasi-dokumen', $data);
     }
 }

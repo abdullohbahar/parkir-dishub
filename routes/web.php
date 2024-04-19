@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardAdminController;
-use App\Http\Controllers\Admin\DataPengajuanController;
+use App\Http\Controllers\Admin\PengajuanAdminController;
 use App\Http\Controllers\Admin\MasterJenisPengajuanController;
+use App\Http\Controllers\Admin\RevisiDokumenPermohonan;
+use App\Http\Controllers\Admin\SetujuiDokumenPermohonan;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VerifikasiDokumenController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pemohon\DashboardPemohonController;
 use App\Http\Controllers\Pemohon\Pengajuan\InputDataPermohonanController;
@@ -39,8 +42,14 @@ Route::prefix('admin')->middleware('check.profile')->group(function () {
     Route::resource('parkir', MasterJenisPengajuanController::class)->only('index');
     Route::resource('user', UserController::class)->only('index', 'create', 'store');
 
+
     Route::prefix('permohonan')->group(function () {
-        Route::get('/', [DataPengajuanController::class, 'index'])->name('admin.data.permohonan');
+        Route::get('/', [PengajuanAdminController::class, 'index'])->name('admin.data.permohonan');
+
+        Route::get('verifikasi-dokumen/{pengajuanID}', [PengajuanAdminController::class, 'verifikasiDokumen'])->name('admin.verifikasi.dokumen');
+        Route::post('revisi-dokumen', [VerifikasiDokumenController::class, 'revisi'])->name('admin.revisi.dokumen');
+        Route::get('setujui-dokumen/{dokumenID}', [VerifikasiDokumenController::class, 'setujui'])->name('admin.setujui.dokumen');
+        Route::put('tolak-dokumen/{pengajuanID}', [VerifikasiDokumenController::class, 'tolak'])->name('admin.tolak.dokumen');
     });
 });
 

@@ -259,7 +259,7 @@ License: For each use you must have a valid license purchased only from above li
                                             <a class="menu-link {{ Request::is('admin/permohonan*') ? 'active' : '' }}"
                                                 href="{{ route('admin.data.permohonan') }}">
                                                 <span class="menu-icon">
-                                                    <i class="fas fa-users"></i>
+                                                    <i class="fas fa-table"></i>
                                                 </span>
                                                 <span class="menu-title">Data Pengajuan</span>
                                             </a>

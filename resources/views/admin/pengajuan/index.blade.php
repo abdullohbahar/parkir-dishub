@@ -49,15 +49,6 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header pt-5">
-                                <h1>Pengajuan</h1>
-                                <div class="card-toolbar">
-                                    <a href="{{ route('pemohon.pilih.jenis.pengajuan') }}" class="btn btn-success">
-                                        <i class="fas fa-plus"></i>
-                                        Buat Pengajuan Baru
-                                    </a>
-                                </div>
-                            </div>
                             <div class="card-body" style="overflow-y: visible">
                                 <table class="table table-bordered table-striped" id="kt_datatable_dom_positioning">
                                     <thead>

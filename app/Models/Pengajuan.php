@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pengajuan extends Model
@@ -43,5 +44,20 @@ class Pengajuan extends Model
     public function hasOneRiwayatPengajuan(): HasOne
     {
         return $this->hasOne(RiwayatPengajuan::class);
+    }
+
+    public function hasOneRiwayatVerifikasi(): HasOne
+    {
+        return $this->hasOne(RiwayatVerifikasi::class);
+    }
+
+    public function hasManyDokumenPengajuan(): HasMany
+    {
+        return $this->hasMany(DokumenPengajuan::class);
+    }
+
+    public function hasOneDokumenPengajuan(): HasOne
+    {
+        return $this->hasOne(DokumenPengajuan::class);
     }
 }
