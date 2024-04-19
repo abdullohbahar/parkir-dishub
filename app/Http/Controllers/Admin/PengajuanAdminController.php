@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Message\SendRevisiMessageToPemohon;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -118,5 +119,27 @@ class PengajuanAdminController extends Controller
         ];
 
         return view('admin.pengajuan.verifikasi-dokumen', $data);
+    }
+
+    public function goToJadwalTinjauanLapangan($pengajuanID)
+    {
+        $sendRevisiMessageToPemohon = new SendRevisiMessageToPemohon();
+        $sendRevisiMessageToPemohon->__invoke($pengajuanID);
+
+        $pengajuan = Pengajuan::with('hasOneRiwayatPengajuan', 'hasOneRiwayatVerifikasi')->findorfail($pengajuanID);
+
+        $pengajuan->status = 'Proses Permohonan';
+        $pengajuan->save();
+
+        $pengajuan->hasOneRiwayatVerifikasi()->create([
+            'step' => 'Input Jadwal Tinjauan Lapangan'
+        ]);
+
+        return to_route('admin.jadwal.tinjauan.lapangan', $pengajuanID);
+    }
+
+    public function JadwalTinjauanLapangan($pengajuanID)
+    {
+        dd("halaman jadwal tinjauan lapangan");
     }
 }

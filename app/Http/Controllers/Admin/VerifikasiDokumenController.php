@@ -101,44 +101,4 @@ class VerifikasiDokumenController extends Controller
 
         curl_close($curl);
     }
-
-    public function sendRevisiMessageToPemohon($pengajuanID, $dokumenID, $alasan)
-    {
-        $pengajuan = Pengajuan::with('hasOnePemohon', 'hasOneDokumenPengajuan')->where('id', $pengajuanID)->first();
-
-        $dokumen = DokumenPengajuan::findorfail($dokumenID)->first();
-
-        $alasan = $alasan;
-
-        $user = User::with('hasOneProfile')->where('id', $pengajuan->user_id)->first();
-        $nomorHpUser = $user->hasOneProfile?->no_telepon;
-
-        $namaDokumen = $dokumen->nama_dokumen;
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.fonnte.com/send',
-            CURLOPT_SSL_VERIFYPEER => FALSE,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array(
-                'target' => "$nomorHpUser", // nomer hp admin
-                'message' => "Anda Perlu Merivisi Dokumen Berikut, Dengan Alasan:\n$alasan\nHarap Melakukan Permohonan Ulang!",
-                'countryCode' => '62', //optional
-            ),
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: ' . config('fonnte.fonnte_token') . '' //change TOKEN to your actual token
-            ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-    }
 }

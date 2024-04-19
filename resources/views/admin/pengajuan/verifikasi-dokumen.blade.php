@@ -236,7 +236,9 @@
                                     </div>
                                 </div>
                                 @if ($pengajuan->status != 'Tolak')
-                                    <form action="" method="POST">
+                                    <form action="{{ route('admin.go.to.jadwal.tinjauan.lapangan', $pengajuan->id) }}"
+                                        method="POST">
+                                        @csrf
                                         <div class="row" {{ $nextButton }}>
                                             <div class="col-12 d-flex justify-content-end">
                                                 <button class="btn btn-success">Selanjutnya</button>
