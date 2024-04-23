@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->foreignUuid('pengajuan_id')->references('id')->on('pengajuans')->onDelete('cascade');
             $table->date('tanggal');
-            $table->text('tempat');
             $table->boolean('is_review')->default(0);
             $table->date('deadline');
             $table->timestamps();

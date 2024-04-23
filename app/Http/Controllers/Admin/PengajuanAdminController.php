@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\Message\SendRevisiMessageToPemohon;
-use App\Models\Pengajuan;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Message\SendApprovedToPemohon;
 use DataTables;
+use App\Models\Pengajuan;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\RiwayatVerifikasi;
+use App\Http\Controllers\Controller;
+use App\Models\JadwalTinjauanLapangan;
+use App\Http\Controllers\Admin\Message\SendRevisiMessageToPemohon;
 
 class PengajuanAdminController extends Controller
 {
@@ -80,8 +84,11 @@ class PengajuanAdminController extends Controller
     {
         $pengajuan = Pengajuan::with('hasOneRiwayatVerifikasi')->findOrFail($pengajuanID);
 
-        if ($pengajuan->status == 'Proses Verifikasi Admin') {
-            return to_route('admin.verifikasi.dokumen', $pengajuanID);
+
+        if ($pengajuan->hasOneRiwayatVerifikasi->step == 'Verifikasi') {
+            return redirect()->route('admin.verifikasi.dokumen', $pengajuanID);
+        } else if ($pengajuan->hasOneRiwayatVerifikasi->step == 'Input Jadwal Tinjauan Lapangan') {
+            return redirect()->route('admin.jadwal.tinjauan.lapangan', $pengajuanID);
         }
     }
 
@@ -140,6 +147,61 @@ class PengajuanAdminController extends Controller
 
     public function JadwalTinjauanLapangan($pengajuanID)
     {
-        dd("halaman jadwal tinjauan lapangan");
+        $pengajuan = Pengajuan::findorfail($pengajuanID);
+
+        $jadwals = JadwalTinjauanLapangan::with('belongsToPengajuan')->get();
+
+        $arrJadwals = [];
+        foreach ($jadwals as $jadwal) {
+            $arrJadwals[] = [
+                'title' => $jadwal->jam,
+                'start' => $jadwal->getRawOriginal('tanggal'),
+                'id' => $jadwal->id
+            ];
+        }
+
+        $data = [
+            'pengajuanID' => $pengajuanID,
+            'pengajuan' => $pengajuan,
+            'arrJadwals' => json_encode($arrJadwals), // Konversi array menjadi JSON
+        ];
+
+        return view('admin.pengajuan.buat-jadwal-tinjauan-lapangan', $data);
+    }
+
+    public function storeJadwalTinjauanLapangan(Request $request)
+    {
+        $jadwal = new JadwalTinjauanLapangan();
+        $cekPengajuan = $jadwal->where('pengajuan_id', $request->pengajuan_id)->first();
+
+        if ($cekPengajuan) {
+            return redirect()->back()->with('failed', 'Anda telah menambahkan jadwal untuk pengajuan ini');
+        }
+
+        JadwalTinjauanLapangan::create([
+            'pengajuan_id' => $request->pengajuan_id,
+            'tanggal' => $request->tanggal,
+            'jam' => $request->jam,
+            'deadline' => now()
+        ]);
+
+        RiwayatVerifikasi::updateorcreate([
+            'pengajuan_id' => $request->pengajuan_id,
+        ], [
+            'step' => 'Tinjauan Lapangan'
+        ]);
+
+        $data = $jadwal->with('belongsToPengajuan.hasOnePemohon.hasOneProfile')->where('pengajuan_id', $request->pengajuan_id)->first();
+
+        $sendApprovedToPemohon = new SendApprovedToPemohon();
+        $sendApprovedToPemohon->__invoke($data);
+
+        // selanjutnya membuat stepper untuk tinjauan lapangan bersama
+        dd("halaman jadwal tinjauan lapangan bersama");
+        // return to_route('admin.tinjauan.lapangan', $request->pengajuan_id)->with('success', 'Berhasil Menambahkan Jadwal, Harap Lakukan Tinjauan Lapangan Sesuai Jadwal Yang Telah Dibuat');
+    }
+
+    public function tinjauanLapangan($pengajuanID)
+    {
     }
 }

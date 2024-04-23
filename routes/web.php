@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\DetailJadwalTinjauanLapangan;
 use App\Http\Controllers\Admin\PengajuanAdminController;
 use App\Http\Controllers\Admin\MasterJenisPengajuanController;
 use App\Http\Controllers\Admin\RevisiDokumenPermohonan;
@@ -50,9 +51,12 @@ Route::prefix('admin')->middleware('check.profile')->group(function () {
         Route::post('revisi-dokumen', [VerifikasiDokumenController::class, 'revisi'])->name('admin.revisi.dokumen');
         Route::get('setujui-dokumen/{dokumenID}', [VerifikasiDokumenController::class, 'setujui'])->name('admin.setujui.dokumen');
         Route::put('tolak-dokumen/{pengajuanID}', [VerifikasiDokumenController::class, 'tolak'])->name('admin.tolak.dokumen');
-        Route::post('go-to-jadwal-tinjauan-lapangan/{pengajuanID}', [PengajuanAdminController::class, 'goToJadwalTinjauanLapangan'])->name('admin.go.to.jadwal.tinjauan.lapangan');
 
+        // jadwal tinjauan lapangan admin
+        Route::post('go-to-jadwal-tinjauan-lapangan/{pengajuanID}', [PengajuanAdminController::class, 'goToJadwalTinjauanLapangan'])->name('admin.go.to.jadwal.tinjauan.lapangan');
         Route::get('input-jadwal-tinjauan-lapangan/{pengajuanID}', [PengajuanAdminController::class, 'JadwalTinjauanLapangan'])->name('admin.jadwal.tinjauan.lapangan');
+        Route::post('store-jadwal-tinjauan-lapangan', [PengajuanAdminController::class, 'storeJadwalTinjauanLapangan'])->name('admin.store.jadwal.tinjauan.lapangan');
+        Route::get('detail-jadwal-tinjauan-lapangan/{jadwalID}', DetailJadwalTinjauanLapangan::class)->name('admin.detail.jadwal.tinjauan.lapangan');
     });
 });
 

@@ -13,8 +13,13 @@ class JadwalTinjauanLapangan extends Model
         'id',
         'pengajuan_id',
         'tanggal',
-        'tempat',
+        'jam',
         'is_review',
         'deadline'
     ];
+
+    public function belongsToPengajuan()
+    {
+        return $this->belongsTo(Pengajuan::class, 'pengajuan_id', 'id');
+    }
 }
