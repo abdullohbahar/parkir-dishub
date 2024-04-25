@@ -216,4 +216,32 @@ class PengajuanAdminController extends Controller
 
         return view('admin.pengajuan.tinjauan-lapangan', $data);
     }
+
+    public function telahMelakukanTinjauan($jadwalID)
+    {
+        $jadwal = JadwalTinjauanLapangan::findorfail($jadwalID);
+
+        JadwalTinjauanLapangan::where('id', $jadwalID)->update([
+            'is_review' => true
+        ]);
+
+        RiwayatVerifikasi::updateorcreate([
+            'pengajuan_id' => $jadwal->pengajuan_id,
+        ], [
+            'step' => 'Menunggu Surat Kesanggupan'
+        ]);
+
+        RiwayatPengajuan::updateorcreate([
+            'pengajuan_id' => $jadwal->pengajuan_id,
+        ], [
+            'step' => 'Upload Surat Kesanggupan'
+        ]);
+
+        return to_route('admin.menunggu.surat.kesanggupan', $jadwal->pengajuan_id)->with('success', 'Terimakasih telah melakukan peninjauan lapangan');
+    }
+
+    public function menungguSuratKesanggupan($pengajuanID)
+    {
+        dd('menunggu surat kesanggupan');
+    }
 }

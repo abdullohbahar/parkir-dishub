@@ -59,6 +59,8 @@ Route::prefix('admin')->middleware('check.profile')->group(function () {
         Route::post('store-jadwal-tinjauan-lapangan', [PengajuanAdminController::class, 'storeJadwalTinjauanLapangan'])->name('admin.store.jadwal.tinjauan.lapangan');
         Route::get('detail-jadwal-tinjauan-lapangan/{jadwalID}', DetailJadwalTinjauanLapangan::class)->name('admin.detail.jadwal.tinjauan.lapangan');
         Route::get('tinjauan-lapangan/{pengajuanID}', [PengajuanAdminController::class, 'tinjauanLapangan'])->name('admin.tinjauan.lapangan');
+        Route::post('tinjauan-lapangan-selesai/{jadwalID}', [PengajuanAdminController::class, 'telahMelakukanTinjauan'])->name('admin.tinjauan.lapangan.selesai');
+        Route::get('menunggu-surat-kesanggupan/{pengajuanID}', [PengajuanAdminController::class, 'menungguSuratKesanggupan'])->name('admin.menunggu.surat.kesanggupan');
     });
 });
 

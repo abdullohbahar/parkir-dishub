@@ -146,17 +146,14 @@
                                     </div>
                                     <div class="col-12 mt-5">
                                         @if (!$pengajuan->hasOneJadwalTinjauan->is_review)
-                                            <form id="tinjauanLapangan" action="" method="POST">
+                                            <form id="tinjauanLapangan"
+                                                action="{{ route('admin.tinjauan.lapangan.selesai', $pengajuan->hasOneJadwalTinjauan->id) }}"
+                                                method="POST">
                                                 @csrf
                                                 <p>Klik tombol ini jika anda telah melakukan tinjauan lapangan</p>
                                                 <button class="btn btn-info btn-sm">Sudah melakukan tinjauan
                                                     lapangan</button>
                                             </form>
-                                        @else
-                                            <div style="float: right">
-                                                {{-- <a href="{{ route('admin.jadwal.sidang', $pengajuan->id) }}"
-                                                    class="btn btn-sm btn-success">Selanjutnya</a> --}}
-                                            </div>
                                         @endif
                                     </div>
                                 </div>
