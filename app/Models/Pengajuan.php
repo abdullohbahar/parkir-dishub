@@ -60,4 +60,9 @@ class Pengajuan extends Model
     {
         return $this->hasOne(DokumenPengajuan::class);
     }
+
+    public function hasOneJadwalTinjauan(): HasOne
+    {
+        return $this->hasOne(JadwalTinjauanLapangan::class);
+    }
 }

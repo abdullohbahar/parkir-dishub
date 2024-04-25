@@ -11,6 +11,7 @@ use App\Models\RiwayatVerifikasi;
 use App\Http\Controllers\Controller;
 use App\Models\JadwalTinjauanLapangan;
 use App\Http\Controllers\Admin\Message\SendRevisiMessageToPemohon;
+use App\Models\RiwayatPengajuan;
 
 class PengajuanAdminController extends Controller
 {
@@ -185,11 +186,15 @@ class PengajuanAdminController extends Controller
             'deadline' => now()
         ]);
 
-        RiwayatVerifikasi::updateorcreate([
-            'pengajuan_id' => $request->pengajuan_id,
-        ], [
-            'step' => 'Tinjauan Lapangan'
-        ]);
+        RiwayatVerifikasi::where('pengajuan_id', $request->pengajuan_id)
+            ->update([
+                'step' => 'Tinjauan Lapangan'
+            ]);
+
+        RiwayatPengajuan::where('pengajuan_id', $request->pengajuan_id)
+            ->update([
+                'step' => 'Tinjauan Lapangan'
+            ]);
 
         $data = $jadwal->with('belongsToPengajuan.hasOnePemohon.hasOneProfile')->where('pengajuan_id', $request->pengajuan_id)->first();
 
@@ -197,11 +202,18 @@ class PengajuanAdminController extends Controller
         $sendApprovedToPemohon->__invoke($data);
 
         // selanjutnya membuat stepper untuk tinjauan lapangan bersama
-        dd("halaman jadwal tinjauan lapangan bersama");
-        // return to_route('admin.tinjauan.lapangan', $request->pengajuan_id)->with('success', 'Berhasil Menambahkan Jadwal, Harap Lakukan Tinjauan Lapangan Sesuai Jadwal Yang Telah Dibuat');
+        // dd("halaman jadwal tinjauan lapangan bersama");
+        return to_route('admin.tinjauan.lapangan', $request->pengajuan_id)->with('success', 'Berhasil Menambahkan Jadwal, Harap Lakukan Tinjauan Lapangan Sesuai Jadwal Yang Telah Dibuat');
     }
 
     public function tinjauanLapangan($pengajuanID)
     {
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findorfail($pengajuanID);
+
+        $data = [
+            'pengajuan' => $pengajuan
+        ];
+
+        return view('admin.pengajuan.tinjauan-lapangan', $data);
     }
 }

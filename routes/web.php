@@ -15,6 +15,7 @@ use App\Http\Controllers\Pemohon\Pengajuan\PilihJenisPengajuanController;
 use App\Http\Controllers\Pemohon\Pengajuan\UploadDokumenPengajuanController;
 use App\Http\Controllers\Pemohon\PengajuanPermohonanController;
 use App\Http\Controllers\Profile\ProfileController;
+use App\Http\Controllers\Template\TemplateJadwalTinjauanLapangan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -57,6 +58,7 @@ Route::prefix('admin')->middleware('check.profile')->group(function () {
         Route::get('input-jadwal-tinjauan-lapangan/{pengajuanID}', [PengajuanAdminController::class, 'JadwalTinjauanLapangan'])->name('admin.jadwal.tinjauan.lapangan');
         Route::post('store-jadwal-tinjauan-lapangan', [PengajuanAdminController::class, 'storeJadwalTinjauanLapangan'])->name('admin.store.jadwal.tinjauan.lapangan');
         Route::get('detail-jadwal-tinjauan-lapangan/{jadwalID}', DetailJadwalTinjauanLapangan::class)->name('admin.detail.jadwal.tinjauan.lapangan');
+        Route::get('tinjauan-lapangan/{pengajuanID}', [PengajuanAdminController::class, 'tinjauanLapangan'])->name('admin.tinjauan.lapangan');
     });
 });
 
@@ -92,3 +94,4 @@ Route::prefix('pemohon')->middleware('check.profile')->group(function () {
 });
 
 Route::resource('profile', ProfileController::class)->only('index', 'edit', 'update');
+Route::get('download-pemberitahuan-jadwal-tinjauan-lapangan/{pengajuanID}', TemplateJadwalTinjauanLapangan::class)->name('download.pemberitahuan.jadwal.tinjauan');
