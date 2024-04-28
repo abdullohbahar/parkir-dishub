@@ -41,7 +41,7 @@ class PengajuanPermohonanController extends Controller
                 ->addColumn('aksi', function ($item) {
 
                     if ($item->status != 'input data belum selesai') {
-                        $detailBtn = "<a href='/pengajuan/andalalin/detail/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
+                        $detailBtn = "<a href='/pemohon/permohonan/detail/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
                         // if ($item->hasOneRiwayatInputData->step == 'Selesai') {
                         //     $verifikasiBtn = '';
                         // } else {
@@ -70,5 +70,16 @@ class PengajuanPermohonanController extends Controller
         ];
 
         return view('pemohon.pengajuan.index', $data);
+    }
+
+    public function detail($pengajuanID)
+    {
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile', 'hasOneJenisPengajuan')->findorfail($pengajuanID);
+
+        $data = [
+            'pengajuan' => $pengajuan
+        ];
+
+        return view('pemohon.pengajuan.detail-data-permohonan', $data);
     }
 }

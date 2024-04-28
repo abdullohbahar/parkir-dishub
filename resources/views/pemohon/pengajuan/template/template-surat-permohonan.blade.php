@@ -141,7 +141,7 @@
                     <br>
                     <br>
                     <br>
-                    {{ $pengajuan->nama_pemilik }}
+                    {{ $pengajuan?->nama_pemilik }}
                 </td>
                 <td style="width: 50%; text-align:center; vertical-align:top">
                     Mengetahui, <br>

@@ -71,6 +71,7 @@ Route::prefix('pemohon')->middleware('check.profile')->group(function () {
 
     Route::prefix('permohonan')->group(function () {
         Route::get('/', [PengajuanPermohonanController::class, 'index'])->name('pemohon.pengajuan.permohonan');
+        Route::get('/detail/{pengajuanID}', [PengajuanPermohonanController::class, 'detail'])->name('pemohon.detail.permohonan');
 
         Route::prefix('pilih-jenis-pengajuan')->group(function () {
             Route::get('/', [PilihJenisPengajuanController::class, 'index'])->name('pemohon.pilih.jenis.pengajuan');
