@@ -14,6 +14,10 @@
                 <div class="step-counter">3</div>
                 <div class="step-name text-center">Dokumen Permohonan</div>
             </div>
+            <div class="stepper-item {{ Route::is('pemohon.jadwal.tinjauan.lapangan') ? 'active' : 'completed' }}">
+                <div class="step-counter">4</div>
+                <div class="step-name text-center">Dokumen Permohonan</div>
+            </div>
         </div>
     </div>
 </div>
