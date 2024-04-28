@@ -45,7 +45,7 @@ class PengajuanPermohonanController extends Controller
                         // if ($item->hasOneRiwayatInputData->step == 'Selesai') {
                         //     $verifikasiBtn = '';
                         // } else {
-                        $verifikasiBtn = "<a href='/pengajuan/andalalin/riwayat-input-data/$item->id' class='btn btn-warning btn-sm'>Aktivitas Permohonan</a>";
+                        $verifikasiBtn = "<a href='/pemohon/permohonan/input-data-permohonan/$item->id' class='btn btn-warning btn-sm'>Aktivitas Permohonan</a>";
                         // }
                     } else {
                         $detailBtn = "<a href='/pengajuan/andalalin/riwayat-input-data/$item->id' class='btn btn-info btn-sm'>Lanjutkan Mengisi Data</a>";

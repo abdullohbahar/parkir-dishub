@@ -112,7 +112,7 @@ class AuthController extends Controller
 
             return redirect(Socialite::driver('keycloak')->getLogoutUrl($redirectUri, env('KEYCLOAK_CLIENT_ID')));
         } else {
-            return to_route('home');
+            return to_route('login');
         }
     }
 }

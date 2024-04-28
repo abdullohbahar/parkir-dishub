@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pemohon\DashboardPemohonController;
 use App\Http\Controllers\Pemohon\Pengajuan\InputDataPermohonanController;
 use App\Http\Controllers\Pemohon\Pengajuan\PilihJenisPengajuanController;
+use App\Http\Controllers\Pemohon\Pengajuan\TinjauanLapanganController;
 use App\Http\Controllers\Pemohon\Pengajuan\UploadDokumenPengajuanController;
 use App\Http\Controllers\Pemohon\PengajuanPermohonanController;
 use App\Http\Controllers\Profile\ProfileController;
@@ -91,6 +92,10 @@ Route::prefix('pemohon')->middleware('check.profile')->group(function () {
 
             Route::get('template-surat-permohonan/{pengajuanID}', [UploadDokumenPengajuanController::class, 'streamSuratPermohonan'])->name('pemohon.template.surat.permohonan');
             Route::get('download-surat-permohonan/{pengajuanID}', [UploadDokumenPengajuanController::class, 'downloadSuratPermohonan'])->name('pemohon.download.surat.permohonan');
+        });
+
+        Route::prefix('jadwal-tinjauan-lapangan')->group(function () {
+            Route::get('/{pengajuanID}', [TinjauanLapanganController::class, 'index'])->name('pemohon.jadwal.tinjauan.lapangan');
         });
     });
 });

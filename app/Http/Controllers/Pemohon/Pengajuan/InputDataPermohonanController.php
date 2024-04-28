@@ -8,6 +8,17 @@ use Illuminate\Http\Request;
 
 class InputDataPermohonanController extends Controller
 {
+    public function redirect($pengajuanID)
+    {
+        $pengajuan = Pengajuan::with('hasOneRiwayatPengajuan')->findOrFail($pengajuanID);
+
+        if ($pengajuan->hasOneRiwayatPengajuan->step == 'Menunggu Verifikasi Admin') {
+            return redirect()->route('admin.verifikasi.dokumen', $pengajuanID);
+        } else if ($pengajuan->hasOneRiwayatPengajuan->step == 'Tinjauan Lapangan') {
+            return redirect()->route('pemohon.jadwal.tinjauan.lapangan', $pengajuanID);
+        }
+    }
+
     public function index($pengajuanID)
     {
         $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile', 'hasOneJenisPengajuan')->findorfail($pengajuanID);
