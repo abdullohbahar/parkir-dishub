@@ -23,7 +23,8 @@ class Pengajuan extends Model
         'luas',
         'longitude',
         'latitude',
-        'status'
+        'status',
+        'nama_pemilik'
     ];
 
     public function hasOnePemohon(): HasOne

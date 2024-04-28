@@ -34,10 +34,12 @@ class InputDataPermohonanController extends Controller
     {
         $request->validate([
             'longitude' => 'required',
+            'nama_pemilik' => 'required',
             'latitude' => 'required',
             'alamat_lokasi_parkir' => 'required',
         ], [
             'longitude.required' => 'longitude harus diisi',
+            'longitude.required' => 'nama pemilik harus diisi',
             'latitiude.required' => 'latitiude harus diisi',
             'alamat_lokasi_parkir.required' => 'alamat lokasi parkir harus diisi',
         ]);
@@ -64,6 +66,7 @@ class InputDataPermohonanController extends Controller
             'alamat_lokasi_parkir' => $request->alamat_lokasi_parkir,
             'panjang' => $request->panjang,
             'luas' => $request->luas,
+            'nama_pemilik' => $request->nama_pemilik,
         ]);
 
         $pengajuan->hasOneRiwayatPengajuan()->update([

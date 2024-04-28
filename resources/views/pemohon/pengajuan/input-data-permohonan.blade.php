@@ -104,6 +104,20 @@
                                         <div class="col-12">
                                             <h2>Data Permohonan</h2>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="" class="form-label">Nama Pemilik
+                                                    Toko/Lembaga/Kantor</label>
+                                                <input type="text"
+                                                    class="form-control @error('nama_pemilik') is-invalid @enderror"
+                                                    name="nama_pemilik" value="{{ old('nama_pemilik') }}" id="">
+                                                @error('nama_pemilik')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <div class="col-12">
                                             <div class="row">
                                                 <div class="col-12 mt-5">
