@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pemohon\DashboardPemohonController;
 use App\Http\Controllers\Pemohon\Pengajuan\InputDataPermohonanController;
 use App\Http\Controllers\Pemohon\Pengajuan\PilihJenisPengajuanController;
+use App\Http\Controllers\Pemohon\Pengajuan\SuratKesanggupanController;
 use App\Http\Controllers\Pemohon\Pengajuan\TinjauanLapanganController;
 use App\Http\Controllers\Pemohon\Pengajuan\UploadDokumenPengajuanController;
 use App\Http\Controllers\Pemohon\PengajuanPermohonanController;
@@ -99,6 +100,11 @@ Route::prefix('pemohon')->middleware('check.profile')->group(function () {
 
         Route::prefix('jadwal-tinjauan-lapangan')->group(function () {
             Route::get('/{pengajuanID}', [TinjauanLapanganController::class, 'index'])->name('pemohon.jadwal.tinjauan.lapangan');
+        });
+
+        Route::prefix('surat-kesanggupan')->group(function () {
+            Route::get('{pengajuanID}', [SuratKesanggupanController::class, 'index'])->name('pemohon.create.surat.kesanggupan');
+            Route::get('stream-template-surat-kesanggupan/{pengajuanID}', [SuratKesanggupanController::class, 'templateSuratKesanggupan'])->name('stream.template.surat.kesanggupan');
         });
     });
 });
