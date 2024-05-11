@@ -150,6 +150,19 @@
                                             frameborder="0"></iframe>
                                     </div>
                                 </div>
+                                <div class="row mt-5">
+                                    <div class="col-12">
+                                        <form action="{{ route('pemohon.upload.surat.kesanggupan', $pengajuanID) }}"
+                                            enctype="multipart/form-data" method="POST" id="myForm">
+                                            @csrf
+                                            <label for="" class="form-label">Upload Surat Kesanggupan</label>
+                                            <input type="file" name="file" class="form-control" required
+                                                accept=".pdf" id="">
+
+                                            <button type="submit" class="btn btn-primary mt-3">Upload</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -168,14 +181,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Menangkap formulir saat di-submit
             var form = document.getElementById(
-                'tinjauanLapangan'); // Ganti 'tinjauanLapangan' dengan ID formulir Anda
+                'myForm'); // Ganti 'tinjauanLapangan' dengan ID formulir Anda
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault(); // Mencegah formulir untuk langsung di-submit
 
                 // Menampilkan konfirmasi SweetAlert
                 Swal.fire({
-                    title: 'Apakah Anda yakin?',
+                    title: 'Apakah Anda yakin? Anda tidak bisa membatalkan aksi ini',
                     text: 'Klik "Ya" untuk konfirmasi.',
                     icon: 'warning',
                     showCancelButton: true,

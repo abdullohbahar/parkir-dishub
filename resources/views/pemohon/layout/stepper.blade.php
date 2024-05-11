@@ -18,7 +18,8 @@
                 <div class="step-counter">4</div>
                 <div class="step-name text-center">Jadwal Tinjauan Lapangan</div>
             </div>
-            <div class="stepper-item {{ Route::is('pemohon.create.surat.kesanggupan') ? 'active' : 'completed' }}">
+            <div
+                class="stepper-item {{ Route::is('pemohon.create.surat.kesanggupan') || Route::is('pemohon.menunggu.verifikasi.surat.kesanggupan') ? 'active' : 'completed' }}">
                 <div class="step-counter">4</div>
                 <div class="step-name text-center">Surat Kesanggupan</div>
             </div>

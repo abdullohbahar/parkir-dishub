@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Pemohon\Pengajuan;
 
+use PDF;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
+use App\Models\SuratKesanggupan;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
-use PDF;
+use App\Models\RiwayatPengajuan;
+use App\Models\RiwayatVerifikasi;
 
 class SuratKesanggupanController extends Controller
 {
@@ -70,5 +74,73 @@ class SuratKesanggupanController extends Controller
         return view('template.jadwal-tinjauan', $data);
     }
 
-    // next task membuat upload surat kesanggupan
+    public function upload(Request $request, $pengajuanID)
+    {
+        $userID = auth()->user()->id;
+
+        $file = $request->file('file');
+        $filename = time() . "- Surat Kesanggupan." . $file->getClientOriginalExtension();
+        $location = 'file-uploads/Surat Kesanggupan/'  . $userID .  '/';
+        $filepath = $location . $filename;
+        $file->storeAs('public/' . $location, $filename);
+
+        SuratKesanggupan::updateorcreate([
+            'pengajuan_id' => $pengajuanID
+        ], [
+            'file' => $filepath,
+            'deadline' => now()
+        ]);
+
+        RiwayatVerifikasi::where('pengajuan_id', $pengajuanID)->update([
+            'step' => 'Verifikasi Surat Kesanggupan'
+        ]);
+
+        RiwayatPengajuan::where('pengajuan_id', $pengajuanID)->update([
+            'step' => 'Menunggu Verifikasi Surat Kesanggupan'
+        ]);
+
+        $this->sendMessageToAdmin($pengajuanID);
+
+        return to_route('pemohon.menunggu.verifikasi.surat.kesanggupan', $pengajuanID)->with('success', 'Berhasil mengunggah');
+    }
+
+    public function menungguVerifikasi($pengajuanID)
+    {
+        return view('pemohon.pengajuan.menunggu-verifikasi-surat-kesanggupan');
+    }
+
+    public function sendMessageToAdmin($pengajuanID)
+    {
+        $nomorHpAdmin = User::with('hasOneProfile')
+            ->where('role', 'admin')
+            ->get()
+            ->pluck('hasOneProfile.no_telepon')
+            ->implode(',');
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_SSL_VERIFYPEER => FALSE,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'target' => "$nomorHpAdmin", // nomer hp admin
+                'message' => "Pemohon Telah Mengunggah Surat Kesanggupan, Harap Melakukan Verifikasi Surat Kesanggupan!",
+                'countryCode' => '62', //optional
+            ),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: ' . config('fonnte.fonnte_token') . '' //change TOKEN to your actual token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+    }
 }

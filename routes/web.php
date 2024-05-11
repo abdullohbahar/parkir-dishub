@@ -105,7 +105,11 @@ Route::prefix('pemohon')->middleware('check.profile')->group(function () {
         Route::prefix('surat-kesanggupan')->group(function () {
             Route::get('{pengajuanID}', [SuratKesanggupanController::class, 'index'])->name('pemohon.create.surat.kesanggupan');
             Route::get('stream-template-surat-kesanggupan/{pengajuanID}', [SuratKesanggupanController::class, 'templateSuratKesanggupan'])->name('stream.template.surat.kesanggupan');
+            Route::post('upload/{pengajuanID}', [SuratKesanggupanController::class, 'upload'])->name('pemohon.upload.surat.kesanggupan');
+            Route::get('menunggu-verifikasi-surat-kesanggupan/{pengajuanID}', [SuratKesanggupanController::class, 'menungguVerifikasi'])->name('pemohon.menunggu.verifikasi.surat.kesanggupan');
         });
+
+        Route::get('selesai/{pengajuanID}', [PengajuanPermohonanController::class, 'pengajuanSelesai'])->name('pemohon.pengajuan.selesai');
     });
 });
 

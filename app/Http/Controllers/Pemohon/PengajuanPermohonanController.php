@@ -147,4 +147,9 @@ class PengajuanPermohonanController extends Controller
 
         return redirect()->back()->with('success', 'Berhasil mengunggah');
     }
+
+    public function pengajuanSelesai($pengajuanID)
+    {
+        dd('membuat halaman menunggu verifikasi surat kesanggupan dari admin');
+    }
 }
