@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\Message\SendApprovedToPemohon;
 use DataTables;
 use App\Models\Pengajuan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\RiwayatPengajuan;
+use App\Models\SuratKesanggupan;
 use App\Models\RiwayatVerifikasi;
 use App\Http\Controllers\Controller;
 use App\Models\JadwalTinjauanLapangan;
+use App\Http\Controllers\Admin\Message\SendApprovedToPemohon;
 use App\Http\Controllers\Admin\Message\SendRevisiMessageToPemohon;
-use App\Models\RiwayatPengajuan;
 
 class PengajuanAdminController extends Controller
 {
@@ -242,6 +243,85 @@ class PengajuanAdminController extends Controller
 
     public function menungguSuratKesanggupan($pengajuanID)
     {
-        dd('menunggu surat kesanggupan');
+        return view('admin.pengajuan.menunggu-surat-kesanggupan');
+    }
+
+    public function verifikasiSuratKesanggupan($pengajuanID)
+    {
+        $pengajuan = Pengajuan::with('hasOneSuratKesanggupan')->findorfail($pengajuanID);
+
+        $data = [
+            'pengajuan' => $pengajuan
+        ];
+
+        return view('admin.pengajuan.verifikasi-surat-kesanggupan', $data);
+    }
+
+    public function approveSuratKesanggupan(Request $request, $pengajuanID)
+    {
+        $userID = auth()->user()->id;
+
+        $file = $request->file('file');
+        $filename = time() . "- Surat Kesanggupan." . $file->getClientOriginalExtension();
+        $location = 'file-uploads/Surat Kesanggupan/'  . $userID .  '/';
+        $filepath = $location . $filename;
+        $file->storeAs('public/' . $location, $filename);
+
+        SuratKesanggupan::updateorcreate([
+            'pengajuan_id' => $pengajuanID
+        ], [
+            'file' => $filepath,
+            'deadline' => now()
+        ]);
+
+        RiwayatVerifikasi::where('pengajuan_id', $pengajuanID)->update([
+            'step' => 'Membuat Surat Keputusan'
+        ]);
+
+        RiwayatPengajuan::where('pengajuan_id', $pengajuanID)->update([
+            'step' => 'Menunggu Surat Keputusan'
+        ]);
+
+        $this->sendMessageToPemohon($pengajuanID);
+
+        return to_route('admin.surat.keputusan', $pengajuanID)->with('success', 'Berhasil memverifikasi dan mengunggah');
+    }
+
+    public function sendMessageToPemohon($pengajuanID)
+    {
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findOrFail($pengajuanID);
+
+        $nomorHpPemohon = $pengajuan->hasOnePemohon->hasOneProfile->no_telepon;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_SSL_VERIFYPEER => FALSE,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'target' => "$nomorHpPemohon", // nomer hp admin
+                'message' => "Admin telah memverifikasi surat kesanggupan anda. Harap menunggu surat keputusan!\nAnda akan mendapat notifikasi jika surat keputusan telah dibuat.",
+                'countryCode' => '62', //optional
+            ),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: ' . config('fonnte.fonnte_token') . '' //change TOKEN to your actual token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+    }
+
+    public function suratKeputusan($pengajuanID)
+    {
+        dd("menunggu surat keputusan");
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('riwayat_pengajuans', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('pengajuan_id')->references('id')->on('pengajuans')->onDelete('cascade');
-            $table->enum('step', ['Memilih Pengajuan', 'Input Data Pengajuan', 'Upload Dokumen Pengajuan', 'Menunggu Verifikasi Admin', 'Tinjauan Lapangan', 'Upload Surat Kesanggupan', 'Menunggu Verifikasi Surat Kesanggupan', 'Selesai']);
+            $table->enum('step', ['Memilih Pengajuan', 'Input Data Pengajuan', 'Upload Dokumen Pengajuan', 'Menunggu Verifikasi Admin', 'Tinjauan Lapangan', 'Upload Surat Kesanggupan', 'Menunggu Verifikasi Surat Kesanggupan', 'Menunggu Surat Keputusan', 'Selesai']);
             $table->timestamps();
         });
     }

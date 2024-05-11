@@ -131,7 +131,7 @@ class SuratKesanggupanController extends Controller
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => array(
                 'target' => "$nomorHpAdmin", // nomer hp admin
-                'message' => "Pemohon Telah Mengunggah Surat Kesanggupan, Harap Melakukan Verifikasi Surat Kesanggupan!",
+                'message' => "Pemohon Telah Mengunggah Surat Kesanggupan, Harap Melakukan Verifikasi Surat Kesanggupan!\nJika surat kesanggupan tidak diverifikasi lebih dari 3 hari, maka pengajuan akan otomatis gagal",
                 'countryCode' => '62', //optional
             ),
             CURLOPT_HTTPHEADER => array(

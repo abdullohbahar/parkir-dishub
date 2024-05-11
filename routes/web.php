@@ -63,6 +63,9 @@ Route::prefix('admin')->middleware('check.profile')->group(function () {
         Route::get('tinjauan-lapangan/{pengajuanID}', [PengajuanAdminController::class, 'tinjauanLapangan'])->name('admin.tinjauan.lapangan');
         Route::post('tinjauan-lapangan-selesai/{jadwalID}', [PengajuanAdminController::class, 'telahMelakukanTinjauan'])->name('admin.tinjauan.lapangan.selesai');
         Route::get('menunggu-surat-kesanggupan/{pengajuanID}', [PengajuanAdminController::class, 'menungguSuratKesanggupan'])->name('admin.menunggu.surat.kesanggupan');
+        Route::get('verifikasi-surat-kesanggupan/{pengajuanID}', [PengajuanAdminController::class, 'verifikasiSuratKesanggupan'])->name('admin.verifikasi.surat.kesanggupan');
+        Route::post('approve-surat-kesanggupan/{pengajuanID}', [PengajuanAdminController::class, 'approveSuratKesanggupan'])->name('admin.approve.surat.kesanggupan');
+        Route::get('membuat-surat-keputusan/{pengajuanID}', [PengajuanAdminController::class, 'suratKeputusan'])->name('admin.surat.keputusan');
     });
 });
 

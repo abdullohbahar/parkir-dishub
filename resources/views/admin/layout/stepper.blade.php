@@ -14,6 +14,11 @@
                 <div class="step-counter">3</div>
                 <div class="step-name text-center">Tinjauan Lapangan</div>
             </div>
+            <div
+                class="stepper-item {{ Route::is('admin.menunggu.surat.kesanggupan') || Route::is('admin.verifikasi.surat.kesanggupan') ? 'active' : 'completed' }}">
+                <div class="step-counter">3</div>
+                <div class="step-name text-center">Surat Kesanggupan</div>
+            </div>
         </div>
     </div>
 </div>
