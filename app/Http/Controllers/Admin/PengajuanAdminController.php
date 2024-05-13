@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Models\JadwalTinjauanLapangan;
 use App\Http\Controllers\Admin\Message\SendApprovedToPemohon;
 use App\Http\Controllers\Admin\Message\SendRevisiMessageToPemohon;
+use App\Models\SuratKeputusan;
 
 class PengajuanAdminController extends Controller
 {
@@ -322,6 +323,40 @@ class PengajuanAdminController extends Controller
 
     public function suratKeputusan($pengajuanID)
     {
-        dd("menunggu surat keputusan");
+        $pengajuan = Pengajuan::findorfail($pengajuanID);
+
+        $data = [
+            'pengajuanID' => $pengajuanID,
+            'pengajuan' => $pengajuan
+        ];
+
+        return view('admin.pengajuan.surat-keputusan', $data);
+    }
+
+    public function kirimSuratKeputusanKeKasi($pengajuanID)
+    {
+        SuratKeputusan::updateorcreate([
+            'pengajuan_id' => $pengajuanID
+        ], [
+            'status' => 'Persetujuan Kasi'
+        ]);
+
+        RiwayatVerifikasi::where('pengajuan_id', $pengajuanID)->update([
+            'step' => 'Menunggu Approve Surat Keputusan'
+        ]);
+
+        return to_route('admin.menunggu.approve.surat.keputusan', $pengajuanID)->with('success', 'Berhasil mengirim surat keputusan ke KASI');
+    }
+
+    public function menungguApproveSuratKeputusan($pengajuanID)
+    {
+        $pengajuan = Pengajuan::findorfail($pengajuanID);
+
+        $data = [
+            'pengajuanID' => $pengajuanID,
+            'pengajuan' => $pengajuan
+        ];
+
+        return view('admin.pengajuan.menunggu-approve-surat-keputusan', $data);
     }
 }

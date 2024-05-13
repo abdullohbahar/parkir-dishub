@@ -28,4 +28,10 @@ class Profile extends Model
     {
         return $this->attributes['tempat_lahir'] . ', ' . Carbon::parse($this->attributes['tanggal_lahir'])->format('d-m-Y');
     }
+
+    public function getTranslatedTtlAttribute()
+    {
+        Carbon::setLocale('id');
+        return $this->attributes['tempat_lahir'] . ', ' . Carbon::parse($this->attributes['tanggal_lahir'])->translatedFormat('d F Y');
+    }
 }

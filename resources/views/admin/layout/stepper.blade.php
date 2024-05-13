@@ -19,6 +19,11 @@
                 <div class="step-counter">3</div>
                 <div class="step-name text-center">Surat Kesanggupan</div>
             </div>
+            <div
+                class="stepper-item {{ Route::is('admin.surat.keputusan') || Route::is('admin.menunggu.approve.surat.keputusan') ? 'active' : 'completed' }}">
+                <div class="step-counter">4</div>
+                <div class="step-name text-center">Surat Keputusan</div>
+            </div>
         </div>
     </div>
 </div>
