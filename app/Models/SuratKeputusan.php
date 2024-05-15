@@ -13,6 +13,6 @@ class SuratKeputusan extends Model
 
     public function belongsToPengajuan()
     {
-        return $this->belongsTo(Pengajuan::class);
+        return $this->belongsTo(Pengajuan::class, 'pengajuan_id', 'id');
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('surat_keputusans', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('pengajuan_id')->references('id')->on('pengajuans')->onDelete('cascade');
-            $table->enum('status', ['Persetujuan Kasi', 'Persetujuan Kabid', 'Persetujuan Kadis']);
+            $table->enum('status', ['Persetujuan Kasi', 'Persetujuan Kabid', 'Persetujuan Kadis', 'Selesai']);
             $table->timestamps();
         });
     }

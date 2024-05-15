@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use DataTables;
+use App\Models\User;
 use App\Models\Pengajuan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\SuratKeputusan;
 use App\Models\RiwayatPengajuan;
 use App\Models\SuratKesanggupan;
 use App\Models\RiwayatVerifikasi;
@@ -13,7 +15,6 @@ use App\Http\Controllers\Controller;
 use App\Models\JadwalTinjauanLapangan;
 use App\Http\Controllers\Admin\Message\SendApprovedToPemohon;
 use App\Http\Controllers\Admin\Message\SendRevisiMessageToPemohon;
-use App\Models\SuratKeputusan;
 
 class PengajuanAdminController extends Controller
 {
@@ -345,7 +346,42 @@ class PengajuanAdminController extends Controller
             'step' => 'Menunggu Approve Surat Keputusan'
         ]);
 
+        $this->sendMessageToKasi();
+
         return to_route('admin.menunggu.approve.surat.keputusan', $pengajuanID)->with('success', 'Berhasil mengirim surat keputusan ke KASI');
+    }
+
+    public function sendMessageToKasi()
+    {
+        $kasi = User::with('hasOneProfile')->where('role', 'kasi')->first();
+
+        $noHpKasi = $kasi->hasOneProfile->no_telepon;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_SSL_VERIFYPEER => FALSE,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'target' => "$noHpKasi", // nomer hp admin
+                'message' => "Admin telah mengirimkan surat keputusan!\nHarap melakukan verifikasi pada surat keputusan tersebut.",
+                'countryCode' => '62', //optional
+            ),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: ' . config('fonnte.fonnte_token') . '' //change TOKEN to your actual token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
     }
 
     public function menungguApproveSuratKeputusan($pengajuanID)

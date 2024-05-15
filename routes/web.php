@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SuratKeputusanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VerifikasiDokumenController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Kasi\DashboardKasiController;
 use App\Http\Controllers\Pemohon\DashboardPemohonController;
 use App\Http\Controllers\Pemohon\Pengajuan\InputDataPermohonanController;
 use App\Http\Controllers\Pemohon\Pengajuan\PilihJenisPengajuanController;
@@ -117,6 +118,12 @@ Route::prefix('pemohon')->middleware('check.profile')->group(function () {
 
         Route::get('selesai/{pengajuanID}', [PengajuanPermohonanController::class, 'pengajuanSelesai'])->name('pemohon.pengajuan.selesai');
     });
+});
+
+Route::prefix('kasi')->middleware('check.profile')->group(function () {
+    Route::get('dashboard', [DashboardKasiController::class, 'index'])->name('kasi.dashboard');
+    Route::get('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKasiController::class, 'setujui'])->name('kasi.verifikasi.surat.keputusan');
+    Route::post('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKasiController::class, 'kirimSuratKeputusanKeKabid'])->name('kasi.kirim.surat.keputusan.kekabid');
 });
 
 Route::resource('profile', ProfileController::class)->only('index', 'edit', 'update');
