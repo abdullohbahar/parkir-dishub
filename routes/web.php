@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\SuratKeputusanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VerifikasiDokumenController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Kabid\DashboardKabidController;
+use App\Http\Controllers\Kadis\DashboardKadisController;
 use App\Http\Controllers\Kasi\DashboardKasiController;
 use App\Http\Controllers\Pemohon\DashboardPemohonController;
 use App\Http\Controllers\Pemohon\Pengajuan\InputDataPermohonanController;
@@ -124,6 +126,18 @@ Route::prefix('kasi')->middleware('check.profile')->group(function () {
     Route::get('dashboard', [DashboardKasiController::class, 'index'])->name('kasi.dashboard');
     Route::get('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKasiController::class, 'setujui'])->name('kasi.verifikasi.surat.keputusan');
     Route::post('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKasiController::class, 'kirimSuratKeputusanKeKabid'])->name('kasi.kirim.surat.keputusan.kekabid');
+});
+
+Route::prefix('kabid')->middleware('check.profile')->group(function () {
+    Route::get('dashboard', [DashboardKabidController::class, 'index'])->name('kabid.dashboard');
+    Route::get('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKabidController::class, 'setujui'])->name('kabid.verifikasi.surat.keputusan');
+    Route::post('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKabidController::class, 'kirimSuratKeputusanKeKadis'])->name('kabid.kirim.surat.keputusan.kekadis');
+});
+
+Route::prefix('kadis')->middleware('check.profile')->group(function () {
+    Route::get('dashboard', [DashboardKadisController::class, 'index'])->name('kadis.dashboard');
+    Route::get('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKadisController::class, 'setujui'])->name('kadis.verifikasi.surat.keputusan');
+    Route::post('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKadisController::class, 'kirimSuratKeputusanKeKadis'])->name('kadis.kirim.surat.keputusan.kekadis');
 });
 
 Route::resource('profile', ProfileController::class)->only('index', 'edit', 'update');

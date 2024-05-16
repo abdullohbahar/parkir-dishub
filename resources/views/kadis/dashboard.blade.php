@@ -1,4 +1,4 @@
-@extends('kasi.layout.app')
+@extends('kadis.layout.app')
 
 @section('title')
     Permohonan
@@ -72,9 +72,9 @@
                                                 <td>{{ $perlu->belongsToPengajuan->hasOneJenisPengajuan->jenis }}</td>
                                                 <td>{{ $perlu->status }}</td>
                                                 <td>
-                                                    <a href="{{ route('kasi.verifikasi.surat.keputusan', $perlu->pengajuan_id) }}"
+                                                    <a href="{{ route('kadis.verifikasi.surat.keputusan', $perlu->pengajuan_id) }}"
                                                         class="btn btn-sm btn-info">
-                                                        {{ $perlu->status == 'Persetujuan Kasi' ? 'Verifikasi Surat Keputusan' : 'Lihat Surat Keputusan' }}
+                                                        {{ $perlu->status == 'Persetujuan Kadis' ? 'Verifikasi Surat Keputusan' : 'Lihat Surat Keputusan' }}
                                                     </a>
                                                 </td>
                                             </tr>
@@ -112,7 +112,7 @@
                                                 <td>{{ $setuju->belongsToPengajuan->hasOnePemohon->hasOneProfile->nama }}
                                                 <td>{{ $setuju->belongsToPengajuan->hasOneJenisPengajuan->jenis }}</td>
                                                 <td>
-                                                    <a href="{{ route('kasi.verifikasi.surat.keputusan', $setuju->pengajuan_id) }}"
+                                                    <a href="{{ route('kadis.verifikasi.surat.keputusan', $setuju->pengajuan_id) }}"
                                                         class="btn btn-sm btn-success">
                                                         Lihat Surat Keputusan
                                                     </a>
