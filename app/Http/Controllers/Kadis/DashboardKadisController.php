@@ -14,8 +14,8 @@ class DashboardKadisController extends Controller
     {
         $suratKeputusan = new SuratKeputusan();
 
-        $perluPersetujuan = $suratKeputusan->with('belongsToPengajuan.hasOnePemohon.hasOneProfile', 'belongsToPengajuan.hasOneJenisPengajuan')->where('status', 'Persetujuan Kabid')->get();
-        $telahDisetujui = $suratKeputusan->with('belongsToPengajuan.hasOnePemohon.hasOneProfile')->where('status', '==', 'Persetujuan Kadis')->get();
+        $perluPersetujuan = $suratKeputusan->with('belongsToPengajuan.hasOnePemohon.hasOneProfile', 'belongsToPengajuan.hasOneJenisPengajuan')->where('status', 'Persetujuan Kadis')->get();
+        $telahDisetujui = $suratKeputusan->with('belongsToPengajuan.hasOnePemohon.hasOneProfile')->where('status', '==', 'Selesai')->get();
 
         $data = [
             'perluPersetujuan' => $perluPersetujuan,
@@ -47,17 +47,20 @@ class DashboardKadisController extends Controller
             'status' => 'Selesai'
         ]);
 
-        $this->sendMessageToAll();
+        $this->sendMessageToAll($pengajuanID);
 
-        return to_route('kadis.verifikasi.surat.keputusan', $pengajuanID)->with('success', 'Berhasil menyetujui & mengirim surat keputusan ke Kadis');
+        return to_route('kadis.verifikasi.surat.keputusan', $pengajuanID)->with('success', 'Berhasil Menyetujui Surat Keputusan');
     }
 
-    public function sendMessageToAll()
+    public function sendMessageToAll($pengajuanID)
     {
+        $admin = User::with('hasOneProfile')->where('role', 'admin')->first();
 
-        $kadis = User::with('hasOneProfile')->where('role', 'kadis')->first();
+        $noHpAdmin = $admin->hasOneProfile->no_telepon;
 
-        $noHpKadis = $kadis->hasOneProfile->no_telepon;
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findorfail($pengajuanID);
+
+        $noHpPemohon = $pengajuan->hasOnePemohon->hasOneProfile->no_telepon;
 
         $curl = curl_init();
 
@@ -72,8 +75,8 @@ class DashboardKadisController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => array(
-                'target' => "$noHpKadis", // nomer hp admin
-                'message' => "Kabid telah mengirimkan surat keputusan!\nHarap melakukan verifikasi pada surat keputusan tersebut.",
+                'target' => "$noHpAdmin,$noHpPemohon", // nomer hp admin
+                'message' => "Surat keputusan telah disetujui dan permohonan anda telah disetujui.\nHarap mengunduh surat keputusan pada halaman permohonan!",
                 'countryCode' => '62', //optional
             ),
             CURLOPT_HTTPHEADER => array(

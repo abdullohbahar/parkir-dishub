@@ -6,6 +6,7 @@ use PDF;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 
 class SuratKeputusanController extends Controller
 {
@@ -33,6 +34,8 @@ class SuratKeputusanController extends Controller
         $kepada = [];
         $kepada['pemohon'] = $pengajuan->hasOnePemohon->hasOneProfile->nama;
 
+        $kadis = User::with('hasOneProfile')->where('role', 'kadis')->first();
+
         $data = [
             'aksara' => $encodeAksara,
             'logo' => $encodeLogo,
@@ -40,7 +43,8 @@ class SuratKeputusanController extends Controller
             'tanggal' => $tanggal,
             'hari' => $hari,
             'tanggalSurat' => $tanggalSurat,
-            'kepada' => $kepada
+            'kepada' => $kepada,
+            'kadis' => $kadis
         ];
 
         $pdf = PDF::loadView('template.surat-keputusan', $data);

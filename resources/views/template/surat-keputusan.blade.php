@@ -370,7 +370,7 @@
                                 <br>
                                 <br>
                                 <br>
-                                Nama Kepala <br>
+                                {{ $kadis->hasOneProfile->nama }} <br>
                                 NIP: NIP KEPALA
                             </td>
                         </tr>
