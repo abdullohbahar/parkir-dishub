@@ -44,7 +44,7 @@ Route::get('/callback', [AuthController::class, 'handleKeycloakCallback'])->name
 Route::get('/logout', [AuthController::class, 'logout'])->name('keycloak.logout');
 
 // admin
-Route::prefix('admin')->middleware('check.profile')->group(function () {
+Route::prefix('admin')->middleware(['check.profile', 'admin'])->group(function () {
     Route::get('dashboard', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
 
     Route::resource('parkir', MasterJenisPengajuanController::class)->only('index');
@@ -76,7 +76,7 @@ Route::prefix('admin')->middleware('check.profile')->group(function () {
 });
 
 
-Route::prefix('pemohon')->middleware('check.profile')->group(function () {
+Route::prefix('pemohon')->middleware(['check.profile', 'pemohon'])->group(function () {
     Route::get('dashboard', [DashboardPemohonController::class, 'index'])->name('pemohon.dashboard');
 
     Route::prefix('permohonan')->group(function () {
@@ -122,19 +122,19 @@ Route::prefix('pemohon')->middleware('check.profile')->group(function () {
     });
 });
 
-Route::prefix('kasi')->middleware('check.profile')->group(function () {
+Route::prefix('kasi')->middleware(['check.profile', 'kasi'])->group(function () {
     Route::get('dashboard', [DashboardKasiController::class, 'index'])->name('kasi.dashboard');
     Route::get('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKasiController::class, 'setujui'])->name('kasi.verifikasi.surat.keputusan');
     Route::post('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKasiController::class, 'kirimSuratKeputusanKeKabid'])->name('kasi.kirim.surat.keputusan.kekabid');
 });
 
-Route::prefix('kabid')->middleware('check.profile')->group(function () {
+Route::prefix('kabid')->middleware(['check.profile', 'kabid'])->group(function () {
     Route::get('dashboard', [DashboardKabidController::class, 'index'])->name('kabid.dashboard');
     Route::get('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKabidController::class, 'setujui'])->name('kabid.verifikasi.surat.keputusan');
     Route::post('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKabidController::class, 'kirimSuratKeputusanKeKadis'])->name('kabid.kirim.surat.keputusan.kekadis');
 });
 
-Route::prefix('kadis')->middleware('check.profile')->group(function () {
+Route::prefix('kadis')->middleware(['check.profile', 'kadis'])->group(function () {
     Route::get('dashboard', [DashboardKadisController::class, 'index'])->name('kadis.dashboard');
     Route::get('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKadisController::class, 'setujui'])->name('kadis.verifikasi.surat.keputusan');
     Route::post('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKadisController::class, 'kirimSuratKeputusanKeKadis'])->name('kadis.kirim.surat.keputusan.kekadis');

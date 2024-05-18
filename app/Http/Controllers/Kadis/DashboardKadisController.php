@@ -6,7 +6,9 @@ use App\Models\User;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Models\SuratKeputusan;
+use App\Models\RiwayatVerifikasi;
 use App\Http\Controllers\Controller;
+use App\Models\RiwayatPengajuan;
 
 class DashboardKadisController extends Controller
 {
@@ -15,7 +17,7 @@ class DashboardKadisController extends Controller
         $suratKeputusan = new SuratKeputusan();
 
         $perluPersetujuan = $suratKeputusan->with('belongsToPengajuan.hasOnePemohon.hasOneProfile', 'belongsToPengajuan.hasOneJenisPengajuan')->where('status', 'Persetujuan Kadis')->get();
-        $telahDisetujui = $suratKeputusan->with('belongsToPengajuan.hasOnePemohon.hasOneProfile')->where('status', '==', 'Selesai')->get();
+        $telahDisetujui = SuratKeputusan::with('belongsToPengajuan.hasOnePemohon.hasOneProfile')->where('status', 'Selesai')->get();
 
         $data = [
             'perluPersetujuan' => $perluPersetujuan,
@@ -45,6 +47,18 @@ class DashboardKadisController extends Controller
             'pengajuan_id' => $pengajuanID
         ], [
             'status' => 'Selesai'
+        ]);
+
+        Pengajuan::findorfail($pengajuanID)->update([
+            'status' => 'Selesai'
+        ]);
+
+        RiwayatVerifikasi::where('pengajuan_id', $pengajuanID)->update([
+            'step' => 'Selesai'
+        ]);
+
+        RiwayatPengajuan::where('pengajuan_id', $pengajuanID)->update([
+            'step' => 'Selesai'
         ]);
 
         $this->sendMessageToAll($pengajuanID);

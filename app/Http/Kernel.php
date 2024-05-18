@@ -2,6 +2,11 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\KasiMiddleware;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\KabidMiddleware;
+use App\Http\Middleware\KadisMiddleware;
+use App\Http\Middleware\PemohonMiddleware;
 use App\Http\Middleware\AlurAdminMiddleware;
 use App\Http\Middleware\CheckProfileMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -66,5 +71,10 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check.profile' => CheckProfileMiddleware::class,
+        'admin' => AdminMiddleware::class,
+        'pemohon' => PemohonMiddleware::class,
+        'kasi' => KasiMiddleware::class,
+        'kabid' => KabidMiddleware::class,
+        'kadis' => KadisMiddleware::class,
     ];
 }
