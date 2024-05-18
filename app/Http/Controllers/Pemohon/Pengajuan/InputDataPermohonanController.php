@@ -37,11 +37,13 @@ class InputDataPermohonanController extends Controller
             'nama_pemilik' => 'required',
             'latitude' => 'required',
             'alamat_lokasi_parkir' => 'required',
+            'lokasi_pengelolaan_parkir' => 'required',
         ], [
             'longitude.required' => 'longitude harus diisi',
             'longitude.required' => 'nama pemilik harus diisi',
             'latitiude.required' => 'latitiude harus diisi',
-            'alamat_lokasi_parkir.required' => 'alamat lokasi parkir harus diisi',
+            'lokasi_pengelolaan_parkir.required' => 'lokasi parkir harus diisi',
+            'alamat_lokasi_parkir.required' => 'alamat parkir harus diisi',
         ]);
 
         $pengajuan = Pengajuan::with('hasOneJenisPengajuan')->where('id', $pengajuanID)->first();
@@ -67,6 +69,7 @@ class InputDataPermohonanController extends Controller
             'panjang' => $request->panjang,
             'luas' => $request->luas,
             'nama_pemilik' => $request->nama_pemilik,
+            'lokasi_pengelolaan_parkir' => $request->lokasi_pengelolaan_parkir,
         ]);
 
         $pengajuan->hasOneRiwayatPengajuan()->update([

@@ -371,7 +371,7 @@
                                 <br>
                                 <br>
                                 {{ $kadis->hasOneProfile->nama }} <br>
-                                NIP: NIP KEPALA
+                                NIP: {{ $kadis->hasOneProfile->nip }}
                             </td>
                         </tr>
                     </table>
