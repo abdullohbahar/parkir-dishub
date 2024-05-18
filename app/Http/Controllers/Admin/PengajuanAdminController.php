@@ -54,11 +54,11 @@ class PengajuanAdminController extends Controller
 
                     if ($item->status != 'Input Data Pengajuan') {
                         $detailBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
-                        // if ($item->hasOneRiwayatInputData->step == 'Selesai') {
-                        //     $verifikasiBtn = '';
-                        // } else {
-                        $verifikasiBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-warning btn-sm'>Aktivitas Permohonan</a>";
-                        // }
+                        if ($item->status) {
+                            $verifikasiBtn = "<a href='/surat-keputusan/$item->id' target='_blank' class='btn btn-success btn-sm'>Surat Keputusan</a>";
+                        } else {
+                            $verifikasiBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-warning btn-sm'>Aktivitas Permohonan</a>";
+                        }
                     } else {
                         $detailBtn = "Harap Menunggu Pemohon Melakukan Input Data Pengajuan";
                         $verifikasiBtn = '';

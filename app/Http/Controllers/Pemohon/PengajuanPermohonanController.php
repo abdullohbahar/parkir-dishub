@@ -63,11 +63,11 @@ class PengajuanPermohonanController extends Controller
 
                     if ($item->status != 'input data belum selesai') {
                         $detailBtn = "<a href='/pemohon/permohonan/detail/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
-                        // if ($item->hasOneRiwayatInputData->step == 'Selesai') {
-                        //     $verifikasiBtn = '';
-                        // } else {
-                        $verifikasiBtn = "<a href='/pemohon/permohonan/input-data-permohonan/$item->id' class='btn btn-warning btn-sm text-dark'>Aktivitas Permohonan</a>";
-                        // }
+                        if ($item->status == 'Selesai') {
+                            $verifikasiBtn = "<a href='/surat-keputusan/$item->id' target='_blank' class='btn btn-success btn-sm'>Surat Keputusan</a>";
+                        } else {
+                            $verifikasiBtn = "<a href='/pemohon/permohonan/input-data-permohonan/$item->id' class='btn btn-warning btn-sm text-dark'>Aktivitas Permohonan</a>";
+                        }
                     } else {
                         $detailBtn = "<a href='/pengajuan/andalalin/riwayat-input-data/$item->id' class='btn btn-info btn-sm'>Lanjutkan Mengisi Data</a>";
                         $verifikasiBtn = '';
