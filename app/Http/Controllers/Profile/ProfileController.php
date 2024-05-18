@@ -76,6 +76,15 @@ class ProfileController extends Controller
             ]);
         }
 
+        if ($request->nip != null) {
+            $request->validate([
+                'nip' => 'required|unique:profiles,nip',
+            ], [
+                'nip.required' => 'NIP harus diisi',
+                'nip.unique' => 'NIP sudah dipakai'
+            ]);
+        }
+
         $data = [
             'user_id' => $id,
             'nama' => $request->nama,
@@ -86,6 +95,7 @@ class ProfileController extends Controller
             'agama' => $request->agama,
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
+            'nip' => $request->nip
         ];
 
         Profile::updateorcreate([

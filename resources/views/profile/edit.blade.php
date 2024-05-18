@@ -105,6 +105,22 @@
                                                 </div>
                                             @enderror
                                         </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3"
+                                            {{ auth()->user()->role == 'pemohon' || auth()->user()->role == 'admin' ? 'hidden' : '' }}>
+                                            <label for="" class="form-label">
+                                                NIP <span style="color: red">*</span>
+                                            </label>
+                                            <input type="text" name="nip"
+                                                class="form-control @error('nip') is-invalid @enderror"
+                                                placeholder="Masukkan NIP Anda"
+                                                value="{{ old('nip', $user->hasOneProfile?->nip ?? '') }}"
+                                                {{ auth()->user()->role == 'pemohon' || auth()->user()->role == 'admin' ? '' : 'required' }}>
+                                            @error('nip')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                             <label for="" class="form-label">
                                                 No Telepon <span style="color: red">*</span>

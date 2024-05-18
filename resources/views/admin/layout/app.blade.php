@@ -158,7 +158,8 @@ License: For each use you must have a valid license purchased only from above li
                                     <!--end::Menu separator-->
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-5">
-                                        <a href="" class="menu-link px-5">My Profile</a>
+                                        <a href="{{ route('profile.edit', auth()->user()->id) }}"
+                                            class="menu-link px-5">My Profile</a>
                                     </div>
                                     <!--end::Menu item-->
                                     <!--begin::Menu item-->

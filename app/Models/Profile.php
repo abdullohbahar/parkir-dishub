@@ -21,7 +21,8 @@ class Profile extends Model
         'agama',
         'pendidikan_terakhir',
         'tempat_lahir',
-        'tanggal_lahir'
+        'tanggal_lahir',
+        'nip'
     ];
 
     public function getTtlAttribute()
