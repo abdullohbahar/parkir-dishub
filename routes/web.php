@@ -54,6 +54,7 @@ Route::prefix('admin')->middleware(['admin', 'check.profile'])->group(function (
     Route::prefix('permohonan')->group(function () {
         Route::get('/', [PengajuanAdminController::class, 'index'])->name('admin.data.permohonan');
 
+        Route::get('/detail/{pengajuanID}', [PengajuanPermohonanController::class, 'detail'])->name('admin.detail.permohonan');
         Route::get('verifikasi-dokumen/{pengajuanID}', [PengajuanAdminController::class, 'verifikasiDokumen'])->name('admin.verifikasi.dokumen');
         Route::post('revisi-dokumen', [VerifikasiDokumenController::class, 'revisi'])->name('admin.revisi.dokumen');
         Route::get('setujui-dokumen/{dokumenID}', [VerifikasiDokumenController::class, 'setujui'])->name('admin.setujui.dokumen');

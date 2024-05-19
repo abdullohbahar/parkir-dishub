@@ -1,4 +1,8 @@
-@extends('pemohon.layout.app')
+@php
+    $role = auth()->user()->role;
+@endphp
+
+@extends($role . '.layout.app')
 
 @section('title')
     Detail Data Permohonan
@@ -136,6 +140,40 @@
                                         </div>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2>Dokumen Permohonan</h2>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nama Dokumen</th>
+                                                    <th>File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($pengajuan->hasManyDokumenPengajuan as $dokumen)
+                                                    <tr>
+                                                        <td>{{ $dokumen->nama_dokumen }}</td>
+                                                        <td>
+                                                            @if ($dokumen->getRawOriginal('file'))
+                                                                <a href="{{ $dokumen->file }}" class="btn btn-primary"
+                                                                    target="_blank">Lihat File</a>
+                                                            @else
+                                                                Pemohon belum melakukan upload dokumen
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

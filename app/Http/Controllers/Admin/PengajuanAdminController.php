@@ -53,7 +53,7 @@ class PengajuanAdminController extends Controller
                 ->addColumn('aksi', function ($item) {
 
                     if ($item->status != 'Input Data Pengajuan') {
-                        $detailBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
+                        $detailBtn = "<a href='/admin/permohonan/detail/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
                         if ($item->status == 'Selesai') {
                             $verifikasiBtn = "<a href='/surat-keputusan/$item->id' target='_blank' class='btn btn-success btn-sm'>Surat Keputusan</a>";
                         } else {
