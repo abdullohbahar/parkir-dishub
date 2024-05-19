@@ -16,6 +16,14 @@ class SuratKesanggupanController extends Controller
 {
     public function index($pengajuanID)
     {
+        $inputDataPermohonanController = new InputDataPermohonanController();
+
+        $redirect = $inputDataPermohonanController->redirectPemohon($pengajuanID);
+
+        if ($redirect && request()->fullUrl() != $redirect) {
+            return redirect()->to($redirect);
+        }
+
         $data = [
             'pengajuanID' => $pengajuanID
         ];

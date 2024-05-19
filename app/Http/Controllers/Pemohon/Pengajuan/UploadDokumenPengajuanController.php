@@ -14,6 +14,14 @@ class UploadDokumenPengajuanController extends Controller
 {
     public function index($pengajuanID)
     {
+        $inputDataPermohonanController = new InputDataPermohonanController();
+
+        $redirect = $inputDataPermohonanController->redirectPemohon($pengajuanID);
+
+        if ($redirect && request()->fullUrl() != $redirect) {
+            return redirect()->to($redirect);
+        }
+
         $dokumenPengajuan = new DokumenPengajuan();
 
         $suratPermohonan = $dokumenPengajuan->where('pengajuan_id', $pengajuanID)->where('nama_dokumen', 'Surat Permohonan')->first();

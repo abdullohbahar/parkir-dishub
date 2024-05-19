@@ -10,6 +10,14 @@ class TinjauanLapanganController extends Controller
 {
     public function index($pengajuanID)
     {
+        $inputDataPermohonanController = new InputDataPermohonanController();
+
+        $redirect = $inputDataPermohonanController->redirectPemohon($pengajuanID);
+
+        if ($redirect && request()->fullUrl() != $redirect) {
+            return redirect()->to($redirect);
+        }
+
         $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findorfail($pengajuanID);
 
         $data = [

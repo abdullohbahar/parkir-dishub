@@ -8,19 +8,50 @@ use Illuminate\Http\Request;
 
 class InputDataPermohonanController extends Controller
 {
-    public function redirect($pengajuanID)
+    public function redirectPemohon($pengajuanID)
     {
         $pengajuan = Pengajuan::with('hasOneRiwayatPengajuan')->findOrFail($pengajuanID);
 
-        if ($pengajuan->hasOneRiwayatPengajuan->step == 'Menunggu Verifikasi Admin') {
-            return redirect()->route('admin.verifikasi.dokumen', $pengajuanID);
-        } else if ($pengajuan->hasOneRiwayatPengajuan->step == 'Tinjauan Lapangan') {
-            return redirect()->route('pemohon.jadwal.tinjauan.lapangan', $pengajuanID);
+        $riwayat = $pengajuan->hasOneRiwayatPengajuan->step ?? '';
+
+        if ($riwayat == 'Memilih Pengajuan') {
+            $redirect = route('pemohon.pilih.jenis.pengajuan');
+            return $redirect;
+        } else if ($riwayat == 'Input Data Pengajuan') {
+            $redirect = route('pemohon.input.data.permohonan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Upload Dokumen Pengajuan') {
+            $redirect = route('pemohon.upload.dokumen.pengajuan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Menunggu Verifikasi Admin') {
+            $redirect = route('pemohon.wait.verification.dokumen.pengajuan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Tinjauan Lapangan') {
+            $redirect = route('pemohon.jadwal.tinjauan.lapangan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Upload Surat Kesanggupan') {
+            $redirect = route('pemohon.create.surat.kesanggupan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Menunggu Verifikasi Surat Kesanggupan') {
+            $redirect = route('pemohon.menunggu.verifikasi.surat.kesanggupan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Selesai') {
+            $redirect = route('pemohon.pengajuan.permohonan');
+            return $redirect;
         }
+
+
+        return null;
     }
 
     public function index($pengajuanID)
     {
+        $redirect = $this->redirectPemohon($pengajuanID);
+
+        if ($redirect && request()->fullUrl() != $redirect) {
+            return redirect()->to($redirect);
+        }
+
         $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile', 'hasOneJenisPengajuan')->findorfail($pengajuanID);
 
         $data = [
