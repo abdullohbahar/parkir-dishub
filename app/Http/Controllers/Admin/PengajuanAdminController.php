@@ -54,7 +54,7 @@ class PengajuanAdminController extends Controller
 
                     if ($item->status != 'Input Data Pengajuan') {
                         $detailBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
-                        if ($item->status) {
+                        if ($item->status == 'Selesai') {
                             $verifikasiBtn = "<a href='/surat-keputusan/$item->id' target='_blank' class='btn btn-success btn-sm'>Surat Keputusan</a>";
                         } else {
                             $verifikasiBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-warning btn-sm'>Aktivitas Permohonan</a>";
@@ -96,9 +96,48 @@ class PengajuanAdminController extends Controller
         }
     }
 
+    public function redirectAdmin($pengajuanID)
+    {
+        $pengajuan = Pengajuan::with('hasOneRiwayatVerifikasi')->findOrFail($pengajuanID);
+
+        $riwayat = $pengajuan->hasOneRiwayatVerifikasi->step ?? '';
+
+        if ($riwayat == 'Verifikasi') {
+            $redirect = route('admin.verifikasi.dokumen', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Input Jadwal Tinjauan Lapangan') {
+            $redirect = route('admin.jadwal.tinjauan.lapangan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Tinjauan Lapangan') {
+            $redirect = route('admin.tinjauan.lapangan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Menunggu Surat Kesanggupan') {
+            $redirect = route('admin.menunggu.surat.kesanggupan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Verifikasi Surat Kesanggupan') {
+            $redirect = route('admin.verifikasi.surat.kesanggupan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Membuat Surat Keputusan') {
+            $redirect = route('admin.surat.keputusan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Menunggu Approve Surat Keputusan') {
+            $redirect = route('admin.menunggu.approve.surat.keputusan', $pengajuanID);
+            return $redirect;
+        } else if ($riwayat == 'Selesai') {
+            $redirect = route('admin.data.permohonan');
+            return $redirect;
+        }
+
+        return null;
+    }
+
     public function verifikasiDokumen($pengajuanID)
     {
-        $this->redirect($pengajuanID);
+        $redirect = $this->redirectAdmin($pengajuanID);
+
+        if ($redirect && request()->fullUrl() != $redirect) {
+            return redirect()->to($redirect);
+        }
 
         $pengajuan = Pengajuan::with('hasOnePemohon', 'hasOneJenisPengajuan', 'hasOneTipePengajuan', 'hasManyDokumenPengajuan')->findorfail($pengajuanID);
 
@@ -151,6 +190,12 @@ class PengajuanAdminController extends Controller
 
     public function JadwalTinjauanLapangan($pengajuanID)
     {
+        $redirect = $this->redirectAdmin($pengajuanID);
+
+        if ($redirect && request()->fullUrl() != $redirect) {
+            return redirect()->to($redirect);
+        }
+
         $pengajuan = Pengajuan::findorfail($pengajuanID);
 
         $jadwals = JadwalTinjauanLapangan::with('belongsToPengajuan')->get();
@@ -211,6 +256,12 @@ class PengajuanAdminController extends Controller
 
     public function tinjauanLapangan($pengajuanID)
     {
+        $redirect = $this->redirectAdmin($pengajuanID);
+
+        if ($redirect && request()->fullUrl() != $redirect) {
+            return redirect()->to($redirect);
+        }
+
         $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findorfail($pengajuanID);
 
         $data = [
@@ -245,11 +296,23 @@ class PengajuanAdminController extends Controller
 
     public function menungguSuratKesanggupan($pengajuanID)
     {
+        $redirect = $this->redirectAdmin($pengajuanID);
+
+        if ($redirect && request()->fullUrl() != $redirect) {
+            return redirect()->to($redirect);
+        }
+
         return view('admin.pengajuan.menunggu-surat-kesanggupan');
     }
 
     public function verifikasiSuratKesanggupan($pengajuanID)
     {
+        $redirect = $this->redirectAdmin($pengajuanID);
+
+        if ($redirect && request()->fullUrl() != $redirect) {
+            return redirect()->to($redirect);
+        }
+
         $pengajuan = Pengajuan::with('hasOneSuratKesanggupan')->findorfail($pengajuanID);
 
         $data = [
@@ -324,6 +387,12 @@ class PengajuanAdminController extends Controller
 
     public function suratKeputusan($pengajuanID)
     {
+        $redirect = $this->redirectAdmin($pengajuanID);
+
+        if ($redirect && request()->fullUrl() != $redirect) {
+            return redirect()->to($redirect);
+        }
+
         $pengajuan = Pengajuan::findorfail($pengajuanID);
 
         $data = [
@@ -386,6 +455,12 @@ class PengajuanAdminController extends Controller
 
     public function menungguApproveSuratKeputusan($pengajuanID)
     {
+        $redirect = $this->redirectAdmin($pengajuanID);
+
+        if ($redirect && request()->fullUrl() != $redirect) {
+            return redirect()->to($redirect);
+        }
+
         $pengajuan = Pengajuan::findorfail($pengajuanID);
 
         $data = [
