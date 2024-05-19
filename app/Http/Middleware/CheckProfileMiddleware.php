@@ -21,7 +21,7 @@ class CheckProfileMiddleware
 
         $user = User::with('hasOneProfile')->where('id', $userID)->first();
 
-        if ($user->hasOneProfile->no_telepon == null) {
+        if ($user->hasOneProfile?->no_telepon == null) {
             return to_route('profile.edit', $userID);
         }
 
