@@ -91,9 +91,9 @@
                                             <select name="role" class="form-control @error('role') is-invalid @enderror"
                                                 id="role" id="">
                                                 <option value="">-- Pilih Role --</option>
-                                                <option {{ $kasi ? 'hidden' : '' }} value="kasi">Kasi</option>
-                                                <option {{ $kabid ? 'hidden' : '' }} value="kabid">Kabid</option>
-                                                <option {{ $kadis ? 'hidden' : '' }} value="kadis">Kadis</option>
+                                                <option value="kasi">Kasi</option>
+                                                <option value="kabid">Kabid</option>
+                                                <option value="kadis">Kadis</option>
                                                 <option value="pemohon">Pemohon</option>
                                             </select>
                                             @error('role')
