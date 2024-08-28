@@ -59,15 +59,21 @@ class PengajuanAdminController extends Controller
                         } else {
                             $verifikasiBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-warning btn-sm'>Aktivitas Permohonan</a>";
                         }
+                        $latitude = $item->latitude;
+                        $longitude = $item->longitude;
+
+                        $btnLihatLokasi = "<a href='https://www.google.com/maps?q=$latitude,$longitude' target='_blank' class='btn btn-success btn-sm'>Lihat Lokasi</a>";
                     } else {
                         $detailBtn = "Harap Menunggu Pemohon Melakukan Input Data Pengajuan";
                         $verifikasiBtn = '';
+                        $btnLihatLokasi  = '';
                     }
 
                     return "
                         <div class='btn-group' role='group'>
                             $detailBtn
                             $verifikasiBtn
+                            $btnLihatLokasi
                         </div>
                     ";
                 })

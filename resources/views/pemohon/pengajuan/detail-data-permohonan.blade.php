@@ -116,6 +116,10 @@
                                                     <tr>
                                                         <td style="width: 25% !important">Longitude / Latitude</td>
                                                         <td>: {{ $pengajuan->longitude }}, {{ $pengajuan->latitude }}
+                                                            &nbsp;&nbsp; <a
+                                                                href='https://www.google.com/maps?q={{ $pengajuan->latitude }},{{ $pengajuan->longitude }}'
+                                                                target='_blank' class='btn btn-success btn-sm'>Lihat
+                                                                Lokasi</a>
                                                         </td>
                                                     </tr>
                                                     <tr>
