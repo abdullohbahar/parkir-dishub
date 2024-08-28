@@ -76,6 +76,27 @@
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3 text-center">
+                                            <img src="{{ $user->hasOneProfile?->foto_profile }}" id="preview-foto-profile"
+                                                class="rounded-3 w-50" alt="user">
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
+                                            <label for="" class="form-label">
+                                                Foto Profile
+                                            </label>
+                                            <input type="file" name="foto_profile"
+                                                class="form-control @error('foto_profile') is-invalid @enderror"
+                                                id="foto_profile">
+                                            <small>Foto hanya boleh bertipe .png, .jpg, dan .jpeg dengan ukuran maksimal
+                                                2MB</small>
+                                            @error('foto_profile')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                             <label for="" class="form-label">
@@ -299,6 +320,42 @@
         var agama = '{{ old('agama', $user->hasOneProfile?->agama) }}'
 
         $("#agama").val(agama)
+
+        $(document).ready(function() {
+            $('#foto_profile').change(function(e) {
+                var file = this.files[0];
+                var errorMessage = '';
+
+                // Validasi tipe file
+                if (file) {
+                    var fileType = file.type;
+                    var fileSize = file.size;
+
+                    if (!fileType.match(/image\/(jpeg|jpg|png)/)) {
+                        errorMessage = 'Tipe file harus berupa .jpg, .jpeg, atau .png.';
+                    } else if (fileSize > 2 * 1024 * 1024) { // 2MB dalam byte
+                        errorMessage = 'Ukuran file maksimal 2MB.';
+                    } else {
+                        // Jika file valid, tampilkan pratinjau gambar
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            $('#preview-foto-profile').attr('src', e.target.result);
+                            $('#error-message').text(''); // Hapus pesan kesalahan
+                        }
+                        reader.readAsDataURL(file);
+                        return; // Keluar dari fungsi untuk menghindari menampilkan pesan kesalahan
+                    }
+                } else {
+                    errorMessage = 'Tidak ada file yang dipilih.';
+                }
+
+                // Jika ada pesan kesalahan, tampilkan di elemen error-message
+                alert(errorMessage)
+                $(this).val("")
+                $('#preview-foto-profile').attr('src',
+                    '/img/default.jpg'); // Hapus pratinjau jika ada kesalahan
+            });
+        });
     </script>
 
     <script src="{{ asset('./assets/js/pages/view-password.js') }}"></script>
