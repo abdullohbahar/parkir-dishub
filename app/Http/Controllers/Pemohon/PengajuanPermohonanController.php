@@ -134,7 +134,7 @@ class PengajuanPermohonanController extends Controller
             File::delete($dokumen->file);
         }
 
-        $file->storeAs('public/' . $location, $filename);
+        $file->storeAs('public/' . $location, $filename, 'public');
 
         DokumenPengajuan::where(
             'id',

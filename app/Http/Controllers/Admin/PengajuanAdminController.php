@@ -330,7 +330,7 @@ class PengajuanAdminController extends Controller
         $filename = time() . "- Surat Kesanggupan." . $file->getClientOriginalExtension();
         $location = 'file-uploads/Surat Kesanggupan/'  . $userID .  '/';
         $filepath = $location . $filename;
-        $file->storeAs('public/' . $location, $filename);
+        $file->storeAs('public/' . $location, $filename, 'public');
 
         SuratKesanggupan::updateorcreate([
             'pengajuan_id' => $pengajuanID
