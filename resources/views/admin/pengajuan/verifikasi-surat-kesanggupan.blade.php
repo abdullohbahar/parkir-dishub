@@ -86,7 +86,7 @@
                                     <div class="col-12">
                                         <div class="col-12">
                                             <iframe style="width: 100%; height: 700px;"
-                                                src="{{ asset($pengajuan->hasOneSuratKesanggupan->file) }}"
+                                                src="{{ $pengajuan->hasOneSuratKesanggupan->file }}"
                                                 frameborder="0"></iframe>
                                         </div>
                                     </div>
@@ -96,7 +96,7 @@
                                     @csrf
                                     <div class="row mt-5">
                                         <div class="col-12 mt-5">
-                                            <label for="">File Surat Kesanggupan</label>
+                                            <label for="">File Surat Kesanggupan </label>
                                             <input type="file" name="file" class="form-control" accept=".pdf"
                                                 id="">
                                             <button type="submit" class="btn btn-success mt-5">Unggah dan Approve Surat

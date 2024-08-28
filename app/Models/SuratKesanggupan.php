@@ -20,7 +20,7 @@ class SuratKesanggupan extends Model
     protected function file(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => asset('/storage/' . $value)
+            get: fn($value) => asset('/storage/public/' . $value)
         );
     }
 }

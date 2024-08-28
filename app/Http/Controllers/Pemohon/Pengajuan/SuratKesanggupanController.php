@@ -56,6 +56,8 @@ class SuratKesanggupanController extends Controller
         $panjang = $pengajuan->panjang ?? '';
         $luas = $pengajuan->luas ?? '';
 
+        $kadis = User::with('hasOneProfile')->where('role', 'kadis')->first();
+
         $data = [
             'aksara' => $encodeAksara,
             'logo' => $encodeLogo,
@@ -72,6 +74,7 @@ class SuratKesanggupanController extends Controller
             'lokasiParkir' => $lokasiParkir,
             'luas' => $luas,
             'panjang' => $panjang,
+            'kadis' => $kadis
         ];
 
         $pdf = PDF::loadView('pemohon.pengajuan.template.template-surat-kesanggupan', $data);
@@ -90,7 +93,7 @@ class SuratKesanggupanController extends Controller
         $filename = time() . "- Surat Kesanggupan." . $file->getClientOriginalExtension();
         $location = 'file-uploads/Surat Kesanggupan/'  . $userID .  '/';
         $filepath = $location . $filename;
-        $file->storeAs('public/' . $location, $filename);
+        $file->storeAs('public/' . $location, $filename, 'public');
 
         SuratKesanggupan::updateorcreate([
             'pengajuan_id' => $pengajuanID
