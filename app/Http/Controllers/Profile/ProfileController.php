@@ -14,8 +14,11 @@ class ProfileController extends Controller
     {
         $userID = auth()->user()->id;
 
+        $user = User::with('hasOneProfile')->findorfail($userID);
+
         $data = [
-            'userID' => $userID
+            'userID' => $userID,
+            'user' => $user
         ];
 
         return view('profile.index', $data);
@@ -56,6 +59,10 @@ class ProfileController extends Controller
 
         $user = User::with('hasOneProfile')->where('id', $id)->first();
 
+        if ($request->hasFile('foto_profile')) {
+            $fotoProfile = $this->handleFileUpload($request, 'foto_profile', 'foto-profile', $id);;
+        }
+
         if ($user->username != $request->username) {
             $request->validate([
                 'username' => 'required|unique:users,username',
@@ -95,7 +102,8 @@ class ProfileController extends Controller
             'agama' => $request->agama,
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
-            'nip' => $request->nip
+            'nip' => $request->nip,
+            'foto_profile' => $fotoProfile ?? ''
         ];
 
         Profile::updateorcreate([
@@ -113,5 +121,14 @@ class ProfileController extends Controller
         User::where('id', $id)->update($dataUser);
 
         return to_route('profile.index')->with('success', 'Berhasil Mengisi Profile');
+    }
+
+    function handleFileUpload($request, $fieldName, $folderName, $id)
+    {
+        $file = $request->file($fieldName);
+        $filename = time() . "." . $file->getClientOriginalExtension();
+        $file->storeAs('file-uploads/' . $folderName, $filename, 'public');
+
+        return $filename;
     }
 }

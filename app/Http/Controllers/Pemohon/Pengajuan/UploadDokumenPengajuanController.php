@@ -50,7 +50,7 @@ class UploadDokumenPengajuanController extends Controller
         $filename = time() . " - $request->nama_dokumen ." . $file->getClientOriginalExtension();
         $location = 'file-uploads/Dokumen Pengajuan/'  . $userID .  '/';
         $filepath = $location . $filename;
-        $file->storeAs('public/' . $location, $filename);
+        $file->storeAs('public/' . $location, $filename, 'public');
 
         DokumenPengajuan::updateorcreate([
             'pengajuan_id' => $request->pengajuan_id,

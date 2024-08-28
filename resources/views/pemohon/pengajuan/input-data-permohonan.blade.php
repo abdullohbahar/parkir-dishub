@@ -150,11 +150,15 @@
                                                         </div>
                                                     @enderror
                                                 </div>
-                                                <div class="col-12 mt-2">
+                                                <div class="col-6 mt-2">
                                                     <button type="button" style="width: 100%" id="getLocation"
                                                         class="btn btn-sm btn-info">Klik
                                                         untuk mengambil
                                                         longitude dan latitude lokasi</button>
+                                                </div>
+                                                <div class="col-6 mt-2">
+                                                    <button type="button" style="width: 100%" id="seeLocation"
+                                                        class="btn btn-sm btn-primary">Lihat Lokasi</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -243,6 +247,14 @@
             } else {
                 console.log("Geolocation is not supported by this browser.");
             }
+        })
+
+        $("#seeLocation").on("click", function() {
+            var latitude = $("#latitude").val()
+            var longitude = $("#longitude").val()
+
+            var url = `https://www.google.com/maps?q=${latitude},${longitude}`
+            window.open(url, '_blank').focus()
         })
     </script>
     <script src="{{ asset('./assets/js/pages/pemohon/pilih-jenis-pengajuan.js') }}"></script>

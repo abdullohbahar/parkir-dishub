@@ -16,7 +16,7 @@
 
 <body>
     <div class="section1">
-        <table style="width: 100%" border="1">
+        <table style="width: 100%">
             <tr style="">
                 <td
                     style="width: 50%; font-size: 14pt; font-weight:bolder; text-transform:uppercase; vertical-align:top;">
@@ -130,7 +130,7 @@
         </p>
     </div>
     <div style="margin-top: 25px">
-        <table style="width: 100%" border="1">
+        <table style="width: 100%">
             <tr>
                 <td style="width: 50%; text-align:center; vertical-align:top">
                     Mengetahui, <br>

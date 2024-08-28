@@ -93,7 +93,7 @@
                                                     class="btn btn-info btn-sm">Unduh
                                                     Template
                                                     Surat Permohonan</a> <br>
-                                                Surat Permohonan
+                                                Surat Permohonan <span style="color: red">*</span>
                                             </label>
                                             <div class="input-group mb-3">
                                                 <input type="hidden" name="nama_dokumen" value="Surat Permohonan">
@@ -119,7 +119,7 @@
                                             <input type="hidden" name="nama_dokumen" value="KTP">
                                             <input type="hidden" name="pengajuan_id" value="{{ $pengajuanID }}">
                                             <label for="" class="form-label mt-4"><br>
-                                                KTP
+                                                KTP <span style="color: red">*</span>
                                             </label>
                                             <div class="input-group mb-3">
                                                 <input type="file" name="file" required class="form-control" required
@@ -145,11 +145,12 @@
                                             <input type="hidden" name="nama_dokumen" value="Pas Foto">
                                             <input type="hidden" name="pengajuan_id" value="{{ $pengajuanID }}">
                                             <label for="" class="form-label mt-4"><br>
-                                                Pas Foto
+                                                Pas Foto <span style="color: red">*</span>
                                             </label>
                                             <div class="input-group mb-3">
                                                 <input type="file" name="file" required class="form-control" required
-                                                    accept=".pdf, .jpg, .png" onchange="validateFile(this)" id="">
+                                                    accept=".pdf, .jpg, .png" onchange="validateFile(this)"
+                                                    id="">
                                                 <button class="input-group-text btn btn-success"
                                                     type="submit">Upload</button>
 
@@ -171,7 +172,7 @@
                                             <input type="hidden" name="nama_dokumen" value="Denah">
                                             <input type="hidden" name="pengajuan_id" value="{{ $pengajuanID }}">
                                             <label for="" class="form-label mt-4"><br>
-                                                Gambar Denah Lokasi
+                                                Gambar Denah Lokasi <span style="color: red">*</span>
                                             </label>
                                             <div class="input-group mb-3">
                                                 <input type="file" name="file" required class="form-control"
@@ -198,7 +199,7 @@
                                             <input type="hidden" name="nama_dokumen" value="Rekom">
                                             <input type="hidden" name="pengajuan_id" value="{{ $pengajuanID }}">
                                             <label for="" class="form-label mt-4"><br>
-                                                Rekom Dari Pemilik Usaha/Instansi
+                                                Rekom Dari Pemilik Usaha/Instansi <span style="color: red">*</span>
                                             </label>
                                             <div class="input-group mb-3">
                                                 <input type="file" name="file" required class="form-control"

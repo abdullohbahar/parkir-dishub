@@ -68,9 +68,15 @@ class PengajuanPermohonanController extends Controller
                         } else {
                             $verifikasiBtn = "<a href='/pemohon/permohonan/input-data-permohonan/$item->id' class='btn btn-warning btn-sm text-dark'>Aktivitas Permohonan</a>";
                         }
+
+                        $latitude = $item->latitude;
+                        $longitude = $item->longitude;
+
+                        $btnLihatLokasi = "<a href='https://www.google.com/maps?q=$latitude,$longitude' target='_blank' class='btn btn-success btn-sm'>Lihat Lokasi</a>";
                     } else {
                         $detailBtn = "<a href='/pengajuan/andalalin/riwayat-input-data/$item->id' class='btn btn-info btn-sm'>Lanjutkan Mengisi Data</a>";
                         $verifikasiBtn = '';
+                        $btnLihatLokasi = '';
                     }
 
                     return "
@@ -78,6 +84,7 @@ class PengajuanPermohonanController extends Controller
                             $detailBtn
                             $btnRevisi
                             $verifikasiBtn
+                            $btnLihatLokasi
                         </div>
                     ";
                 })
@@ -134,7 +141,7 @@ class PengajuanPermohonanController extends Controller
             File::delete($dokumen->file);
         }
 
-        $file->storeAs('public/' . $location, $filename);
+        $file->storeAs('public/' . $location, $filename, 'public');
 
         DokumenPengajuan::where(
             'id',

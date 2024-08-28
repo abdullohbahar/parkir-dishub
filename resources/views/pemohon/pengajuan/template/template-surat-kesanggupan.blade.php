@@ -165,7 +165,7 @@
                     <br>
                     <br>
                     <br>
-                    Nama Terang
+                    {{ $kadis->hasOneProfile?->nama ?? '' }}
                 </td>
                 <td style="text-align:center">
                     <br>
