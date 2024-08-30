@@ -23,9 +23,11 @@ class AuthController extends Controller
         $request->validate([
             'username' => 'required',
             'password' => 'required',
+            'g-recaptcha-response' => 'required|captcha'
         ], [
             'username.required' => ':attribute harus diisi',
             'password.required' => ':attribute harus diisi',
+            'g-recaptcha-response.required' => 'Recaptcha harus diisi',
         ]);
 
         $auth = [

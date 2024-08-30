@@ -138,6 +138,15 @@ License: For each use you must have a valid license purchased only from above li
                                     class="form-control bg-transparent" />
                                 <!--end::Password-->
                             </div>
+                            <div class="mb-3">
+                                {!! NoCaptcha::renderJs() !!}
+                                {!! NoCaptcha::display() !!}
+                                @if ($errors->has('g-recaptcha-response'))
+                                    <span class="help-block" style="color: red">
+                                        <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
                             <!--end::Input group=-->
                             <!--end::Wrapper-->
                             <!--begin::Submit button-->
