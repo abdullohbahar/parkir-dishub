@@ -217,10 +217,10 @@
                             Surat permohonan dari saudara
                             <span style="text-transform: uppercase">
                                 <b>
-                                    {{ $pengajuan->hasOnePemohon->hasOneProfile->nama }}
+                                    {{ $pengajuan->hasOnePemohon?->hasOneProfile?->nama }}
                                 </b>
                             </span>
-                            yang beralamat di {{ $pengajuan->hasOnePemohon->hasOneProfile->alamat }}.
+                            yang beralamat di {{ $pengajuan->hasOnePemohon?->hasOneProfile?->alamat }}.
                         </li>
                     </ol>
                 </td>
@@ -247,26 +247,26 @@
                             <td>NAMA</td>
                             <td>:</td>
                             <td>
-                                {{ $pengajuan->hasOnePemohon->hasOneProfile->nama }}
+                                {{ $pengajuan->hasOnePemohon?->hasOneProfile?->nama }}
                             </td>
                         </tr>
                         <tr>
                             <td>TEMPAT, TANGGAL LAHIR</td>
                             <td>:</td>
-                            <td> {{ $pengajuan->hasOnePemohon->hasOneProfile->translatedTtl }}</td>
+                            <td> {{ $pengajuan->hasOnePemohon?->hasOneProfile?->translatedTtl }}</td>
                         </tr>
                         <tr>
                             <td>Alamat</td>
                             <td>:</td>
                             <td>
-                                {{ $pengajuan->hasOnePemohon->hasOneProfile->alamat }}
+                                {{ $pengajuan->hasOnePemohon?->hasOneProfile?->alamat }}
                             </td>
                         </tr>
                         <tr>
                             <td>NIK</td>
                             <td>:</td>
                             <td>
-                                {{ $pengajuan->hasOnePemohon->hasOneProfile->no_ktp }}
+                                {{ $pengajuan->hasOnePemohon?->hasOneProfile?->no_ktp }}
                             </td>
                         </tr>
                     </table>
@@ -370,8 +370,8 @@
                                 <br>
                                 <br>
                                 <br>
-                                {{ $kadis->hasOneProfile->nama }} <br>
-                                NIP: {{ $kadis->hasOneProfile->nip }}
+                                {{ $kadis->hasOneProfile?->nama }} <br>
+                                NIP: {{ $kadis->hasOneProfile?->nip }}
                             </td>
                         </tr>
                     </table>
