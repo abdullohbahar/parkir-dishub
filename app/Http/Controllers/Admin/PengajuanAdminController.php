@@ -277,6 +277,27 @@ class PengajuanAdminController extends Controller
         return view('admin.pengajuan.tinjauan-lapangan', $data);
     }
 
+    public function ubahTinjauanLapangan(Request $request, $id)
+    {
+        // $jadwal = new JadwalTinjauanLapangan();
+
+        JadwalTinjauanLapangan::where('id', $id)->update([
+            'tanggal' => $request->tanggal,
+            'jam' => $request->jam
+        ]);
+
+        // $data = $jadwal->with('belongsToPengajuan.belongsToUser.hasOneProfile', 'belongsToPengajuan.hasOneDataPemohon')->where('pengajuan_id', $request->pengajuan_id)->first();
+
+        // $this->kirimNotifikasiJadwalDiubah($data);
+
+        return redirect()->back()->with('success', 'Berhasil mengubah jadwal');
+    }
+
+    public function kirimNotifikasiJadwalDiubah($data)
+    {
+        // biarkan kosong next akan diubah jadi email
+    }
+
     public function telahMelakukanTinjauan($jadwalID)
     {
         $jadwal = JadwalTinjauanLapangan::findorfail($jadwalID);
