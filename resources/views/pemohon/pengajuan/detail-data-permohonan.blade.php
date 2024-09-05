@@ -139,6 +139,7 @@
                                                         <td>: {{ $pengajuan->luas }}
                                                         </td>
                                                     </tr>
+
                                                 </table>
                                             </div>
                                         </div>
@@ -174,6 +175,15 @@
                                                         </td>
                                                     </tr>
                                                 @endforeach
+                                                @if ($pengajuan->hasOneSuratKesanggupan)
+                                                    <tr>
+                                                        <td style="width: 25% !important">Luas</td>
+                                                        <td>
+                                                            <a href="{{ $pengajuan?->hasOneSuratKesanggupan?->file }}"
+                                                                class="btn btn-primary" target="_blank">Lihat File</a>
+                                                        </td>
+                                                    </tr>
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
