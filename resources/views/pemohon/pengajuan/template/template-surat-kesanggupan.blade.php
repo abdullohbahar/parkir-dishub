@@ -165,7 +165,7 @@
                     <br>
                     <br>
                     <br>
-                    {{ $kadis->hasOneProfile?->nama ?? '' }}
+                    {{-- {{ $kadis->hasOneProfile?->nama ?? '' }} --}}
                 </td>
                 <td style="text-align:center">
                     <br>

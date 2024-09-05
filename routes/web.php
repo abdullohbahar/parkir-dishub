@@ -16,12 +16,14 @@ use App\Http\Controllers\Kasi\DashboardKasiController;
 use App\Http\Controllers\Pemohon\DashboardPemohonController;
 use App\Http\Controllers\Pemohon\Pengajuan\InputDataPermohonanController;
 use App\Http\Controllers\Pemohon\Pengajuan\PilihJenisPengajuanController;
+use App\Http\Controllers\Pemohon\Pengajuan\SuratKeputusanController as PengajuanSuratKeputusanController;
 use App\Http\Controllers\Pemohon\Pengajuan\SuratKesanggupanController;
 use App\Http\Controllers\Pemohon\Pengajuan\TinjauanLapanganController;
 use App\Http\Controllers\Pemohon\Pengajuan\UploadDokumenPengajuanController;
 use App\Http\Controllers\Pemohon\PengajuanPermohonanController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Template\TemplateJadwalTinjauanLapangan;
+use App\Models\SuratKeputusan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,6 +68,7 @@ Route::prefix('admin')->middleware(['admin', 'check.profile'])->group(function (
         Route::post('store-jadwal-tinjauan-lapangan', [PengajuanAdminController::class, 'storeJadwalTinjauanLapangan'])->name('admin.store.jadwal.tinjauan.lapangan');
         Route::get('detail-jadwal-tinjauan-lapangan/{jadwalID}', DetailJadwalTinjauanLapangan::class)->name('admin.detail.jadwal.tinjauan.lapangan');
         Route::get('tinjauan-lapangan/{pengajuanID}', [PengajuanAdminController::class, 'tinjauanLapangan'])->name('admin.tinjauan.lapangan');
+        Route::put('ubah-tinjauan-lapangan/{tinjauanID}', [PengajuanAdminController::class, 'ubahTinjauanLapangan'])->name('admin.ubah.tinjauan.lapangan');
         Route::post('tinjauan-lapangan-selesai/{jadwalID}', [PengajuanAdminController::class, 'telahMelakukanTinjauan'])->name('admin.tinjauan.lapangan.selesai');
         Route::get('menunggu-surat-kesanggupan/{pengajuanID}', [PengajuanAdminController::class, 'menungguSuratKesanggupan'])->name('admin.menunggu.surat.kesanggupan');
         Route::get('verifikasi-surat-kesanggupan/{pengajuanID}', [PengajuanAdminController::class, 'verifikasiSuratKesanggupan'])->name('admin.verifikasi.surat.kesanggupan');
@@ -117,6 +120,7 @@ Route::prefix('pemohon')->middleware(['pemohon', 'check.profile'])->group(functi
             Route::get('stream-template-surat-kesanggupan/{pengajuanID}', [SuratKesanggupanController::class, 'templateSuratKesanggupan'])->name('stream.template.surat.kesanggupan');
             Route::post('upload/{pengajuanID}', [SuratKesanggupanController::class, 'upload'])->name('pemohon.upload.surat.kesanggupan');
             Route::get('menunggu-verifikasi-surat-kesanggupan/{pengajuanID}', [SuratKesanggupanController::class, 'menungguVerifikasi'])->name('pemohon.menunggu.verifikasi.surat.kesanggupan');
+            Route::get('menunggu-verifikasi-surat-keputusan/{pengajuanID}', [PengajuanSuratKeputusanController::class, 'menungguVerifikasi'])->name('pemohon.menunggu.verifikasi.surat.keputusan');
         });
 
         Route::get('selesai/{pengajuanID}', [PengajuanPermohonanController::class, 'pengajuanSelesai'])->name('pemohon.pengajuan.selesai');

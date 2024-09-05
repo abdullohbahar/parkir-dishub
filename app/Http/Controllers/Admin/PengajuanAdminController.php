@@ -55,7 +55,7 @@ class PengajuanAdminController extends Controller
                     if ($item->status != 'Input Data Pengajuan') {
                         $detailBtn = "<a href='/admin/permohonan/detail/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
                         if ($item->status == 'Selesai') {
-                            $verifikasiBtn = "<a href='/surat-keputusan/$item->id' target='_blank' class='btn btn-success btn-sm'>Surat Keputusan</a>";
+                            $verifikasiBtn = "<a href='/surat-keputusan/$item->id' target='_blank' class='btn btn-info btn-sm'>Surat Keputusan</a>";
                         } else {
                             $verifikasiBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-warning btn-sm'>Aktivitas Permohonan</a>";
                         }
@@ -275,6 +275,27 @@ class PengajuanAdminController extends Controller
         ];
 
         return view('admin.pengajuan.tinjauan-lapangan', $data);
+    }
+
+    public function ubahTinjauanLapangan(Request $request, $id)
+    {
+        // $jadwal = new JadwalTinjauanLapangan();
+
+        JadwalTinjauanLapangan::where('id', $id)->update([
+            'tanggal' => $request->tanggal,
+            'jam' => $request->jam
+        ]);
+
+        // $data = $jadwal->with('belongsToPengajuan.belongsToUser.hasOneProfile', 'belongsToPengajuan.hasOneDataPemohon')->where('pengajuan_id', $request->pengajuan_id)->first();
+
+        // $this->kirimNotifikasiJadwalDiubah($data);
+
+        return redirect()->back()->with('success', 'Berhasil mengubah jadwal');
+    }
+
+    public function kirimNotifikasiJadwalDiubah($data)
+    {
+        // biarkan kosong next akan diubah jadi email
     }
 
     public function telahMelakukanTinjauan($jadwalID)

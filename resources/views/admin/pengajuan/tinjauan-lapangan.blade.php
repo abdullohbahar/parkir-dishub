@@ -135,12 +135,25 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td></td>
-                                                {{-- <td>
+                                                <td>
+                                                    @php
+                                                        $tanggalTinjauan = $pengajuan->hasOneJadwalTinjauan->getRawOriginal(
+                                                            'tanggal',
+                                                        );
+                                                        $tanggalSekarang = date('Y-m-d');
+                                                    @endphp
+
+                                                    @if ($tanggalTinjauan > $tanggalSekarang)
+                                                        <button data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                            class="btn btn-warning btn-sm text-dark">Ubah Jadwal Tinjauan
+                                                            Lapangan</button>
+                                                    @endif
+                                                </td>
+                                                <td>
                                                     <a href="{{ route('download.pemberitahuan.jadwal.tinjauan', $pengajuan->id) }}"
                                                         target="_blank" class="btn btn-info btn-sm">Unduh
                                                         Pemberitahuan Jadwal Tinjauan</a>
-                                                </td> --}}
+                                                </td>
                                             </tr>
                                         </table>
                                     </div>
@@ -168,6 +181,96 @@
         <!--end::Content-->
     </div>
     <!--end::Content wrapper-->
+
+    @if ($tanggalTinjauan > $tanggalSekarang)
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Ubah Jadwal Tinjauan Lapangan</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('admin.ubah.tinjauan.lapangan', $pengajuan->hasOneJadwalTinjauan->id) }}"
+                        method="POST">
+                        @method('PUT')
+                        @csrf
+                        <input type="hidden" name="pengajuan_id" value="{{ $pengajuan->id }}">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label class="form-label" for="">Tanggal</label>
+                                    <input type="date" class="form-control" name="tanggal" value="{{ $tanggalTinjauan }}"
+                                        id="">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 mt-3">
+                                    <label class="form-label" for="">Jam</label>
+                                </div>
+                                <div class="col-6">
+                                    <label style="width: 100%">
+                                        <input type="radio" value="08:00 - 10:00" name="jam"
+                                            class="card-input-element" />
+                                        <div class="panel panel-default card-input text-center rounded-pill">
+                                            <div class="panel-heading centered-element">
+                                                <h2 class="pt-1">
+                                                    08:00 - 10:00
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="col-6">
+                                    <label style="width: 100%">
+                                        <input type="radio" value="10:00 - 12:00" name="jam"
+                                            class="card-input-element" required />
+                                        <div class="panel panel-default card-input text-center rounded-pill">
+                                            <div class="panel-heading centered-element">
+                                                <h2 class="pt-1">
+                                                    10:00 - 12:00
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="col-6">
+                                    <label style="width: 100%">
+                                        <input type="radio" value="13:00 - 15:00" name="jam"
+                                            class="card-input-element" />
+                                        <div class="panel panel-default card-input text-center rounded-pill">
+                                            <div class="panel-heading centered-element">
+                                                <h2 class="pt-1">
+                                                    13:00 - 15:00
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="col-6">
+                                    <label style="width: 100%">
+                                        <input type="radio" value="15:00 - 17:00" name="jam"
+                                            class="card-input-element" />
+                                        <div class="panel panel-default card-input text-center rounded-pill">
+                                            <div class="panel-heading centered-element">
+                                                <h2 class="pt-1">
+                                                    15:00 - 17:00
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection
 
 @push('addons-js')
