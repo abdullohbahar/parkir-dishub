@@ -135,7 +135,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2">
+                                                <td>
                                                     @php
                                                         $tanggalTinjauan = $pengajuan->hasOneJadwalTinjauan->getRawOriginal(
                                                             'tanggal',
@@ -148,11 +148,11 @@
                                                             class="btn btn-warning btn-sm text-dark">Ubah Jadwal Tinjauan
                                                             Lapangan</button>
                                                     @endif
-                                                    {{-- <td>
+                                                </td>
+                                                <td>
                                                     <a href="{{ route('download.pemberitahuan.jadwal.tinjauan', $pengajuan->id) }}"
                                                         target="_blank" class="btn btn-info btn-sm">Unduh
                                                         Pemberitahuan Jadwal Tinjauan</a>
-                                                </td> --}}
                                                 </td>
                                             </tr>
                                         </table>

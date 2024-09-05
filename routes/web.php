@@ -16,12 +16,14 @@ use App\Http\Controllers\Kasi\DashboardKasiController;
 use App\Http\Controllers\Pemohon\DashboardPemohonController;
 use App\Http\Controllers\Pemohon\Pengajuan\InputDataPermohonanController;
 use App\Http\Controllers\Pemohon\Pengajuan\PilihJenisPengajuanController;
+use App\Http\Controllers\Pemohon\Pengajuan\SuratKeputusanController as PengajuanSuratKeputusanController;
 use App\Http\Controllers\Pemohon\Pengajuan\SuratKesanggupanController;
 use App\Http\Controllers\Pemohon\Pengajuan\TinjauanLapanganController;
 use App\Http\Controllers\Pemohon\Pengajuan\UploadDokumenPengajuanController;
 use App\Http\Controllers\Pemohon\PengajuanPermohonanController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Template\TemplateJadwalTinjauanLapangan;
+use App\Models\SuratKeputusan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -118,6 +120,7 @@ Route::prefix('pemohon')->middleware(['pemohon', 'check.profile'])->group(functi
             Route::get('stream-template-surat-kesanggupan/{pengajuanID}', [SuratKesanggupanController::class, 'templateSuratKesanggupan'])->name('stream.template.surat.kesanggupan');
             Route::post('upload/{pengajuanID}', [SuratKesanggupanController::class, 'upload'])->name('pemohon.upload.surat.kesanggupan');
             Route::get('menunggu-verifikasi-surat-kesanggupan/{pengajuanID}', [SuratKesanggupanController::class, 'menungguVerifikasi'])->name('pemohon.menunggu.verifikasi.surat.kesanggupan');
+            Route::get('menunggu-verifikasi-surat-keputusan/{pengajuanID}', [PengajuanSuratKeputusanController::class, 'menungguVerifikasi'])->name('pemohon.menunggu.verifikasi.surat.keputusan');
         });
 
         Route::get('selesai/{pengajuanID}', [PengajuanPermohonanController::class, 'pengajuanSelesai'])->name('pemohon.pengajuan.selesai');

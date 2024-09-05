@@ -35,6 +35,9 @@ class InputDataPermohonanController extends Controller
         } else if ($riwayat == 'Menunggu Verifikasi Surat Kesanggupan') {
             $redirect = route('pemohon.menunggu.verifikasi.surat.kesanggupan', $pengajuanID);
             return $redirect;
+        } else if ($riwayat == 'Menunggu Surat Keputusan') {
+            $redirect = route('pemohon.menunggu.verifikasi.surat.keputusan', $pengajuanID);
+            return $redirect;
         } else if ($riwayat == 'Selesai') {
             $redirect = route('pemohon.pengajuan.permohonan');
             return $redirect;
