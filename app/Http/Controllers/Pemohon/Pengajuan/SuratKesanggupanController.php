@@ -42,12 +42,12 @@ class SuratKesanggupanController extends Controller
         $pengajuan = Pengajuan::with('hasOneJadwalTinjauan', 'hasOnePemohon.hasOneProfile')->findOrFail($pengajuanID);
 
         \Carbon\Carbon::setLocale('id');
-        $tanggal = \Carbon\Carbon::parse($pengajuan->hasOneJadwalTinjauan->tanggal)->translatedFormat('L F Y');
+        $tanggal = \Carbon\Carbon::parse($pengajuan->hasOneJadwalTinjauan->tanggal)->translatedFormat('d F Y');
         $hari = \Carbon\Carbon::parse($pengajuan->hasOneJadwalTinjauan->tanggal)->translatedFormat('l');
-        $tanggalSurat = \Carbon\Carbon::parse($pengajuan->hasOneJadwalTinjauan->created_at)->translatedFormat('L F Y');
+        $tanggalSurat = \Carbon\Carbon::parse($pengajuan->hasOneJadwalTinjauan->created_at)->translatedFormat('d F Y');
 
         $nama = $pengajuan->hasOnePemohon->hasOneProfile->nama;
-        $tanggalLahir = $pengajuan->hasOnePemohon->hasOneProfile->tempat_lahir . ', ' . Carbon::parse($pengajuan->hasOnePemohon->hasOneProfile->tanggal_lahir)->translatedFormat('L F Y');
+        $tanggalLahir = $pengajuan->hasOnePemohon->hasOneProfile->tempat_lahir . ', ' . Carbon::parse($pengajuan->hasOnePemohon->hasOneProfile->tanggal_lahir)->translatedFormat('d F Y');
         $agama = $pengajuan->hasOnePemohon->hasOneProfile->agama;
         $pendidikanTerakhir = $pengajuan->hasOnePemohon->hasOneProfile->pendidikan_terakhir;
         $alamat = $pengajuan->hasOnePemohon->hasOneProfile->alamat;

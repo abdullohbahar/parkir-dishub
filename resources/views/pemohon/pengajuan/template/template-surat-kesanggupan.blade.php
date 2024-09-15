@@ -120,7 +120,7 @@
                 <td>: {{ $noTelepon }}</td>
             </tr>
             <tr>
-                <td>Luas Lokasi Parkir</td>
+                <td>Lokasi Parkir</td>
                 <td>: {{ $lokasiParkir }}</td>
             </tr>
             @if ($luas)
@@ -150,7 +150,7 @@
         </ol>
         <p>Demikian surat ini dibuat untuk dapat digunakan sebgaimana mestinya.</p>
         <p style="text-align:right">
-            Bantul, 7 Mei 2024
+            {{ tanggalTtd() }}
         </p>
         <table style="width: 100%;">
             <tr>

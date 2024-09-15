@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('jadwal_tinjauan_lapangans', function (Blueprint $table) {
-            $table->time('jam')->after('tanggal');
+            $table->text('jam')->after('tanggal');
         });
     }
 

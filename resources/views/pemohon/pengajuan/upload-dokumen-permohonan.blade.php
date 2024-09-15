@@ -104,7 +104,7 @@
                                             </div>
                                             @if ($suratPermohonan)
                                                 <a target="_blank" href="{{ $suratPermohonan->file }}">
-                                                    Lihat Surat Permohonan Yang Telah Diupload
+                                                    Lihat File Yang Telah Diupload
                                                 </a>
                                             @endif
                                             <ol>
@@ -130,7 +130,7 @@
                                             </div>
                                             @if ($ktp)
                                                 <a target="_blank" href="{{ $ktp->file }}">
-                                                    Lihat Surat Permohonan Yang Telah Diupload
+                                                    Lihat File Yang Telah Diupload
                                                 </a>
                                             @endif
                                             <ol>
@@ -157,7 +157,7 @@
                                             </div>
                                             @if ($pasFoto)
                                                 <a target="_blank" href="{{ $pasFoto->file }}">
-                                                    Lihat Surat Permohonan Yang Telah Diupload
+                                                    Lihat File Yang Telah Diupload
                                                 </a>
                                             @endif
                                             <ol>
@@ -184,7 +184,7 @@
                                             </div>
                                             @if ($denah)
                                                 <a target="_blank" href="{{ $denah->file }}">
-                                                    Lihat Surat Permohonan Yang Telah Diupload
+                                                    Lihat File Yang Telah Diupload
                                                 </a>
                                             @endif
                                             <ol>
@@ -210,7 +210,7 @@
                                             </div>
                                             @if ($rekom)
                                                 <a target="_blank" href="{{ $rekom->file }}">
-                                                    Lihat Surat Permohonan Yang Telah Diupload
+                                                    Lihat File Yang Telah Diupload
                                                 </a>
                                             @endif
                                             <ol>
