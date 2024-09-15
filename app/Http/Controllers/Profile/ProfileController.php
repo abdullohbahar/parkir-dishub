@@ -10,14 +10,12 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    public function index()
+    public function index($id)
     {
-        $userID = auth()->user()->id;
-
-        $user = User::with('hasOneProfile')->findorfail($userID);
+        $user = User::with('hasOneProfile')->findorfail($id);
 
         $data = [
-            'userID' => $userID,
+            'userID' => $id,
             'user' => $user
         ];
 
@@ -29,7 +27,8 @@ class ProfileController extends Controller
         $user = User::with('hasOneProfile')->findorfail($id);
 
         $data = [
-            'user' => $user
+            'user' => $user,
+            'id' => $id
         ];
 
         return view('profile.edit', $data);
@@ -46,6 +45,7 @@ class ProfileController extends Controller
             'pendidikan_terakhir' => 'required',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required',
+            'role' => 'required'
         ], [
             'nama.required' => 'Nama harus diisi',
             'no_ktp.required' => 'Nomor KTP harus diisi',
@@ -55,12 +55,13 @@ class ProfileController extends Controller
             'pendidikan_terakhir.required' => 'Pendidikan Terakhir harus diisi',
             'tempat_lahir.required' => 'Tempat Lahir Terakhir harus diisi',
             'tanggal_lahir.required' => 'Tanggal Lahir Terakhir harus diisi',
+            'role.required' => 'role harus diisi'
         ]);
 
         $user = User::with('hasOneProfile')->where('id', $id)->first();
 
         if ($request->hasFile('foto_profile')) {
-            $fotoProfile = $this->handleFileUpload($request, 'foto_profile', 'foto-profile', $id);;
+            $fotoProfile = $this->handleFileUpload($request, 'foto_profile', 'foto-profile', $id);
         }
 
         if ($user->username != $request->username) {
@@ -103,7 +104,7 @@ class ProfileController extends Controller
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
             'nip' => $request->nip,
-            'foto_profile' => $fotoProfile ?? ''
+            'foto_profile' => $fotoProfile ?? $user->hasOneProfile?->getRawOriginal('foto_profile'),
         ];
 
         Profile::updateorcreate([
@@ -111,7 +112,8 @@ class ProfileController extends Controller
         ], $data);
 
         $dataUser = [
-            'username' => $request->username
+            'username' => $request->username,
+            'role' => $request->role
         ];
 
         if ($request->password) {
@@ -120,7 +122,7 @@ class ProfileController extends Controller
 
         User::where('id', $id)->update($dataUser);
 
-        return to_route('profile.index')->with('success', 'Berhasil Mengisi Profile');
+        return to_route('profile.index', $id)->with('success', 'Berhasil Mengisi Profile');
     }
 
     function handleFileUpload($request, $fieldName, $folderName, $id)

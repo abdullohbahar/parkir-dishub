@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('tipe_pengajuans', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('jenis_pengajuan_id')->references('id')->on('jenis_pengajuans')->onDelete('cascade');
+            $table->foreignUuid('jenis_pengajuan_id')->nullable()->references('id')->on('jenis_pengajuans')->nullOnDelete();
             $table->string('tipe');
             $table->timestamps();
         });

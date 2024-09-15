@@ -31,12 +31,19 @@ class UserController extends Controller
                 ->addColumn('no_telepon', function ($item) {
                     return $item->hasOneProfile?->no_telepon;
                 })
-                // ->addColumn('aksi', function ($item) {
-                //     return "
-                //         <button data-id='$item->id' id='delete' data-nama='$item->username' class='btn btn-danger btn-sm'>Hapus</button>
-                //     ";
-                // })
-                ->rawColumns(['nama', 'no_telepon'])
+                ->addColumn('aksi', function ($item) {
+                    $route = route('profile.edit', $item->id);
+                    $routeShow = route('profile.index', $item->id);
+
+                    return "
+                    <div class='btn-group' role='group' aria-label='Basic example'>
+                        <a href='$route' class='btn btn-warning btn-sm'>Edit</a>
+                        <a href='$routeShow' class='btn btn-info btn-sm'>Profile</a>
+                        <a data-id='$item->id' data-nama='{$item->hasOneProfile?->nama}' id='removeBtn' style='cursor: pointer !important;' class='btn btn-sm btn-danger'><b>Hapus</b></a>
+                    </div>
+                    ";
+                })
+                ->rawColumns(['nama', 'no_telepon', 'aksi'])
                 ->make();
         }
 
@@ -95,5 +102,27 @@ class UserController extends Controller
         ]);
 
         return to_route('user.index')->with('success', 'Berhasil menambah user');
+    }
+
+    public function destroy($id)
+    {
+        try {
+            Profile::where('user_id', $id)->delete();
+            User::findOrFail($id)->delete();
+
+            // Mengembalikan respons JSON sukses dengan status 200
+            return response()->json([
+                'message' => 'Berhasil Menghapus',
+                'status' => 200,
+                'error' => false
+            ]);
+        } catch (\Exception $e) {
+            // Menangkap exception jika terjadi kesalahan
+            return response()->json([
+                'message' => 'Gagal Menghapus' . $e,
+                'status' => 500,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }

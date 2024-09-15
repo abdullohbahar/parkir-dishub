@@ -72,7 +72,7 @@
                                 <h1>Lengkapi Profil Anda</h1>
                             </div>
                             <div class="card-body" style="overflow-y: visible">
-                                <form action="{{ route('profile.update', auth()->user()->id) }}" method="POST"
+                                <form action="{{ route('profile.update', $id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
@@ -171,6 +171,24 @@
                                                 <option value="Lain-lain">Lain-lain</option>
                                             </select>
                                             @error('agama')
+                                                <div class="invalid-feedback text-capitalize">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-4">
+                                            <label for="" class="form-label">Role</label>
+                                            <select name="role"
+                                                class="form-control @error('role') is-invalid @enderror" id="role"
+                                                id="">
+                                                <option value="">-- Pilih Role --</option>
+                                                <option value="admin">Admin</option>
+                                                <option value="kasi">Kasi</option>
+                                                <option value="kabid">Kabid</option>
+                                                <option value="kadis">Kadis</option>
+                                                <option value="pemohon">Pemohon</option>
+                                            </select>
+                                            @error('role')
                                                 <div class="invalid-feedback text-capitalize">
                                                     {{ $message }}
                                                 </div>
@@ -317,6 +335,10 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
     <script>
+        var role = '{{ old('role', $user->role) }}'
+
+        $("#role").val(role)
+
         var agama = '{{ old('agama', $user->hasOneProfile?->agama) }}'
 
         $("#agama").val(agama)

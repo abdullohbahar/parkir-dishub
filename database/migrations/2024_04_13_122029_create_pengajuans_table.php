@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('pengajuans', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignUuid('jenis_pengajuan_id')->references('id')->on('jenis_pengajuans')->onDelete('cascade');
-            $table->foreignUuid('tipe_pengajuan_id')->references('id')->on('tipe_pengajuans')->onDelete('cascade');
+            $table->foreignUuid('user_id')->nullable()->references('id')->on('users')->nullOnDelete();
+            $table->foreignUuid('jenis_pengajuan_id')->nullable()->references('id')->on('jenis_pengajuans')->nullOnDelete();
+            $table->foreignUuid('tipe_pengajuan_id')->nullable()->references('id')->on('tipe_pengajuans')->nullOnDelete();
             $table->text('lokasi_pengelolaan_parkir')->nullable();
             $table->text('alamat_lokasi_parkir')->nullable();
             $table->string('panjang')->nullable();

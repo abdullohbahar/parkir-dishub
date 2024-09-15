@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('dokumen_pengajuans', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('pengajuan_id')->references('id')->on('pengajuans')->onDelete('cascade');
+            $table->foreignUuid('pengajuan_id')->nullable()->references('id')->on('pengajuans')->nullOnDelete();
             $table->string('nama_dokumen');
             $table->text('file');
             $table->timestamps();

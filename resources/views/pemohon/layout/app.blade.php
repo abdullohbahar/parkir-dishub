@@ -275,7 +275,7 @@ License: For each use you must have a valid license purchased only from above li
                                         <div class="menu-item">
                                             <!--begin:Menu link-->
                                             <a class="menu-link {{ Request::is('profile*') ? 'active' : '' }}"
-                                                href="{{ route('profile.index') }}">
+                                                href="{{ route('profile.index', auth()->user()->id) }}">
                                                 <span class="menu-icon">
                                                     <i class="fas fa-user"></i>
                                                 </span>
