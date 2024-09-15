@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('riwayat_verifikasis', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('pengajuan_id')->references('id')->on('pengajuans')->onDelete('cascade');
+            $table->foreignUuid('pengajuan_id')->nullable()->references('id')->on('pengajuans')->nullOnDelete();
             $table->enum('step', ['Verifikasi', 'Input Jadwal Tinjauan Lapangan', 'Tinjauan Lapangan', 'Menunggu Surat Kesanggupan', 'Verifikasi Surat Kesanggupan', 'Membuat Surat Keputusan', 'Menunggu Approve Surat Keputusan', 'Selesai']);
             $table->timestamps();
         });

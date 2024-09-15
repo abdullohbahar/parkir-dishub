@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('surat_kesanggupans', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('pengajuan_id')->references('id')->on('pengajuans')->onDelete('cascade');
+            $table->foreignUuid('pengajuan_id')->nullable()->references('id')->on('pengajuans')->nullOnDelete();
             $table->text('file');
             $table->date('deadline');
             $table->timestamps();

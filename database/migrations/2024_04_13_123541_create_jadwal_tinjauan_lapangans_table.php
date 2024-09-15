@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('jadwal_tinjauan_lapangans', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('pengajuan_id')->references('id')->on('pengajuans')->onDelete('cascade');
+            $table->foreignUuid('pengajuan_id')->nullable()->references('id')->on('pengajuans')->nullOnDelete();
             $table->date('tanggal');
             $table->boolean('is_review')->default(0);
             $table->date('deadline');

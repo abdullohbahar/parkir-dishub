@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignUuid('user_id')->nullable()->references('id')->on('users')->nullOnDelete();
             $table->string('nama');
             $table->string('no_ktp', 17)->nullable();
             $table->text('alamat')->nullable();
