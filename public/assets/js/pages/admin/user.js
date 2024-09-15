@@ -102,7 +102,7 @@ KTUtil.onDOMContentLoaded(function () {
 });
 
 //  Delete Data
-$("body").on("click", "#delete", function () {
+$("body").on("click", "#removeBtn", function () {
     var id = $(this).data("id");
     var nama = $(this).data("nama");
 
@@ -117,7 +117,7 @@ $("body").on("click", "#delete", function () {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "/admin/user/destroy/" + id,
+                url: "/admin/user/" + id,
                 dataType: "json",
                 type: "DELETE",
                 success: function (response) {

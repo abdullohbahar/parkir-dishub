@@ -103,4 +103,26 @@ class UserController extends Controller
 
         return to_route('user.index')->with('success', 'Berhasil menambah user');
     }
+
+    public function destroy($id)
+    {
+        try {
+            Profile::where('user_id', $id)->delete();
+            User::findOrFail($id)->delete();
+
+            // Mengembalikan respons JSON sukses dengan status 200
+            return response()->json([
+                'message' => 'Berhasil Menghapus',
+                'status' => 200,
+                'error' => false
+            ]);
+        } catch (\Exception $e) {
+            // Menangkap exception jika terjadi kesalahan
+            return response()->json([
+                'message' => 'Gagal Menghapus' . $e,
+                'status' => 500,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
 }
