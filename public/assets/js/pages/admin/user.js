@@ -60,11 +60,11 @@ var KTDatatablesServerSide = (function () {
                     data: "role",
                     name: "role",
                 },
-                // {
-                //     orderable: true,
-                //     data: "aksi",
-                //     name: "aksi",
-                // },
+                {
+                    orderable: true,
+                    data: "aksi",
+                    name: "aksi",
+                },
             ],
             columnDefs: [
                 {

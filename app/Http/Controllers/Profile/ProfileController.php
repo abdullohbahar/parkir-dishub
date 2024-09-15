@@ -10,14 +10,12 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    public function index()
+    public function index($id)
     {
-        $userID = auth()->user()->id;
-
-        $user = User::with('hasOneProfile')->findorfail($userID);
+        $user = User::with('hasOneProfile')->findorfail($id);
 
         $data = [
-            'userID' => $userID,
+            'userID' => $id,
             'user' => $user
         ];
 
@@ -29,7 +27,8 @@ class ProfileController extends Controller
         $user = User::with('hasOneProfile')->findorfail($id);
 
         $data = [
-            'user' => $user
+            'user' => $user,
+            'id' => $id
         ];
 
         return view('profile.edit', $data);
@@ -60,7 +59,7 @@ class ProfileController extends Controller
         $user = User::with('hasOneProfile')->where('id', $id)->first();
 
         if ($request->hasFile('foto_profile')) {
-            $fotoProfile = $this->handleFileUpload($request, 'foto_profile', 'foto-profile', $id);;
+            $fotoProfile = $this->handleFileUpload($request, 'foto_profile', 'foto-profile', $id);
         }
 
         if ($user->username != $request->username) {
@@ -103,7 +102,7 @@ class ProfileController extends Controller
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
             'nip' => $request->nip,
-            'foto_profile' => $fotoProfile ?? ''
+            'foto_profile' => $fotoProfile ?? $user->hasOneProfile?->getRawOriginal('foto_profile')
         ];
 
         Profile::updateorcreate([
@@ -120,7 +119,7 @@ class ProfileController extends Controller
 
         User::where('id', $id)->update($dataUser);
 
-        return to_route('profile.index')->with('success', 'Berhasil Mengisi Profile');
+        return to_route('profile.index', $id)->with('success', 'Berhasil Mengisi Profile');
     }
 
     function handleFileUpload($request, $fieldName, $folderName, $id)

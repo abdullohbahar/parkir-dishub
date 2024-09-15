@@ -50,7 +50,7 @@ Route::prefix('admin')->middleware(['admin', 'check.profile'])->group(function (
     Route::get('dashboard', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
 
     Route::resource('parkir', MasterJenisPengajuanController::class)->only('index');
-    Route::resource('user', UserController::class)->only('index', 'create', 'store');
+    Route::resource('user', UserController::class);
 
 
     Route::prefix('permohonan')->group(function () {
@@ -145,6 +145,7 @@ Route::prefix('kadis')->middleware(['kadis', 'check.profile'])->group(function (
     Route::post('verifikasi-surat-keputusan/{pengajuanID}', [DashboardKadisController::class, 'kirimSuratKeputusanKeKadis'])->name('kadis.kirim.surat.keputusan.kekadis');
 });
 
-Route::resource('profile', ProfileController::class)->only('index', 'edit', 'update');
+Route::get('profile/{id}', [ProfileController::class, 'index'])->name('profile.index');
+Route::resource('profile', ProfileController::class)->only('edit', 'update', 'show');
 Route::get('download-pemberitahuan-jadwal-tinjauan-lapangan/{pengajuanID}', TemplateJadwalTinjauanLapangan::class)->name('download.pemberitahuan.jadwal.tinjauan');
 Route::get('surat-keputusan/{pengajuanID}', SuratKeputusanController::class)->name('surat.keputusan');

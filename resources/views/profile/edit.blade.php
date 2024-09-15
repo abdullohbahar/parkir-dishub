@@ -72,7 +72,7 @@
                                 <h1>Lengkapi Profil Anda</h1>
                             </div>
                             <div class="card-body" style="overflow-y: visible">
-                                <form action="{{ route('profile.update', auth()->user()->id) }}" method="POST"
+                                <form action="{{ route('profile.update', $id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
