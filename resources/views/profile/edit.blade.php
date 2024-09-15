@@ -176,6 +176,23 @@
                                                 </div>
                                             @enderror
                                         </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-4">
+                                            <label for="" class="form-label">Role</label>
+                                            <select name="role"
+                                                class="form-control @error('role') is-invalid @enderror" id="role"
+                                                id="">
+                                                <option value="">-- Pilih Role --</option>
+                                                <option value="kasi">Kasi</option>
+                                                <option value="kabid">Kabid</option>
+                                                <option value="kadis">Kadis</option>
+                                                <option value="pemohon">Pemohon</option>
+                                            </select>
+                                            @error('role')
+                                                <div class="invalid-feedback text-capitalize">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-3">
                                             <label for="" class="form-label">
                                                 Pendidikan Terakhir <span style="color: red">*</span>
@@ -317,6 +334,10 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
     <script>
+        var role = '{{ old('role', $user->role) }}'
+
+        $("#role").val(role)
+
         var agama = '{{ old('agama', $user->hasOneProfile?->agama) }}'
 
         $("#agama").val(agama)

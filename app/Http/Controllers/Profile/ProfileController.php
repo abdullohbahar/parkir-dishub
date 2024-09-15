@@ -45,6 +45,7 @@ class ProfileController extends Controller
             'pendidikan_terakhir' => 'required',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required',
+            'role' => 'required'
         ], [
             'nama.required' => 'Nama harus diisi',
             'no_ktp.required' => 'Nomor KTP harus diisi',
@@ -54,6 +55,7 @@ class ProfileController extends Controller
             'pendidikan_terakhir.required' => 'Pendidikan Terakhir harus diisi',
             'tempat_lahir.required' => 'Tempat Lahir Terakhir harus diisi',
             'tanggal_lahir.required' => 'Tanggal Lahir Terakhir harus diisi',
+            'role.required' => 'role harus diisi'
         ]);
 
         $user = User::with('hasOneProfile')->where('id', $id)->first();
@@ -102,7 +104,7 @@ class ProfileController extends Controller
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
             'nip' => $request->nip,
-            'foto_profile' => $fotoProfile ?? $user->hasOneProfile?->getRawOriginal('foto_profile')
+            'foto_profile' => $fotoProfile ?? $user->hasOneProfile?->getRawOriginal('foto_profile'),
         ];
 
         Profile::updateorcreate([
@@ -110,7 +112,8 @@ class ProfileController extends Controller
         ], $data);
 
         $dataUser = [
-            'username' => $request->username
+            'username' => $request->username,
+            'role' => $request->role
         ];
 
         if ($request->password) {
