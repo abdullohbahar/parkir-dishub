@@ -129,7 +129,13 @@ class ProfileController extends Controller
     {
         $file = $request->file($fieldName);
         $filename = time() . "." . $file->getClientOriginalExtension();
-        $file->storeAs('file-uploads/' . $folderName, $filename, 'public');
+        $filepath = $file->storeAs('file-uploads/' . $folderName, $filename, 'public');
+
+        // Dapatkan path absolut file yang baru saja disimpan
+        $absolutePath = storage_path('app/public/' . $filepath);
+
+        // Atur permission file menjadi 755
+        chmod($absolutePath, 0755);
 
         return $filename;
     }
