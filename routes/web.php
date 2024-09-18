@@ -82,6 +82,7 @@ Route::prefix('admin')->middleware(['admin', 'check.profile'])->group(function (
 
 Route::prefix('pemohon')->middleware(['pemohon', 'check.profile'])->group(function () {
     Route::get('dashboard', [DashboardPemohonController::class, 'index'])->name('pemohon.dashboard');
+    Route::get('tes-email', [DashboardPemohonController::class, 'tesEmail']);
 
     Route::prefix('permohonan')->group(function () {
         Route::get('/', [PengajuanPermohonanController::class, 'index'])->name('pemohon.pengajuan.permohonan');
