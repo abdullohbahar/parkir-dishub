@@ -41,7 +41,9 @@ class Profile extends Model
     protected function fotoProfile(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value ? asset('storage/file-uploads/foto-profile/' . $value) : asset('img/default.jpg')
+            get: fn($value) => $value
+                ? asset('file-uploads/foto-profile/' . $value)
+                : asset('img/default.jpg')
         );
     }
 }

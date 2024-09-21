@@ -64,7 +64,7 @@
                                         @csrf
                                         <div class="row mt-5">
                                             <div class="col-12 mt-5">
-                                                <h2>Setujui dan Kirim Surat Keputusan Ke KADIS</h2>
+                                                <h2>Setujui dan Proses TTE</h2>
                                                 <button type="submit" class="btn btn-success mt-5">Setujui & Kirim</button>
                                             </div>
                                         </div>
