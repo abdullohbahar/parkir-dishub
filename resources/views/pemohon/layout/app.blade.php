@@ -153,7 +153,7 @@ License: For each use you must have a valid license purchased only from above li
                                             <!--begin::Username-->
                                             <div class="d-flex flex-column">
                                                 <div class="fw-bold d-flex align-items-center fs-5">
-                                                    {{-- {{ auth()->user()->username }} --}}
+                                                    {{ auth()->user()->hasOneProfile?->nama }}
                                                 </div>
                                             </div>
                                             <!--end::Username-->

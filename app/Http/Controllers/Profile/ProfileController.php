@@ -127,15 +127,22 @@ class ProfileController extends Controller
 
     function handleFileUpload($request, $fieldName, $folderName, $id)
     {
+        // Ambil file dari request
         $file = $request->file($fieldName);
+
+        // Buat nama file unik dengan menambahkan timestamp
         $filename = time() . "." . $file->getClientOriginalExtension();
-        $filepath = $file->storeAs('file-uploads/' . $folderName, $filename, 'public');
 
-        // Dapatkan path absolut file yang baru saja disimpan
-        $absolutePath = storage_path('app/public/' . $filepath);
+        // Tentukan folder penyimpanan di dalam folder public
+        $folderPath = public_path('file-uploads/' . $folderName);
 
-        // Atur permission file menjadi 755
-        chmod($absolutePath, 0755);
+        // Pastikan folder tujuan ada, jika belum ada, buat folder tersebut
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0755, true);
+        }
+
+        // Pindahkan file ke folder tujuan di public
+        $file->move($folderPath, $filename);
 
         return $filename;
     }
