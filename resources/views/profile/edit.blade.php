@@ -157,6 +157,17 @@
                                             @enderror
                                         </div>
                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-4">
+                                            <label for="" class="form-label">Email</label>
+                                            <input type="email" name="email"
+                                                class="form-control @error('email') is-invalid @enderror" id="email"
+                                                value="{{ old('email', $user->email ?? '') }}">
+                                            @error('email')
+                                                <div class="invalid-feedback text-capitalize">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mt-4">
                                             <label for="" class="form-label">Agama <span
                                                     style="color: red">*</span></label>
                                             <select name="agama" class="form-control @error('agama') is-invalid @enderror"

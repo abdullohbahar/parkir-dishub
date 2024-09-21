@@ -45,7 +45,8 @@ class ProfileController extends Controller
             'pendidikan_terakhir' => 'required',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required',
-            'role' => 'required'
+            'role' => 'required',
+            'email' => 'required',
         ], [
             'nama.required' => 'Nama harus diisi',
             'no_ktp.required' => 'Nomor KTP harus diisi',
@@ -53,9 +54,10 @@ class ProfileController extends Controller
             'alamat.required' => 'Alamat harus diisi',
             'agama.required' => 'Agama harus diisi',
             'pendidikan_terakhir.required' => 'Pendidikan Terakhir harus diisi',
-            'tempat_lahir.required' => 'Tempat Lahir Terakhir harus diisi',
-            'tanggal_lahir.required' => 'Tanggal Lahir Terakhir harus diisi',
-            'role.required' => 'role harus diisi'
+            'tempat_lahir.required' => 'Tempat Lahir harus diisi',
+            'tanggal_lahir.required' => 'Tanggal Lahir harus diisi',
+            'role.required' => 'role harus diisi',
+            'email.required' => 'email harus diisi',
         ]);
 
         $user = User::with('hasOneProfile')->where('id', $id)->first();
@@ -113,7 +115,8 @@ class ProfileController extends Controller
 
         $dataUser = [
             'username' => $request->username,
-            'role' => $request->role
+            'role' => $request->role,
+            'email' => $request->email,
         ];
 
         if ($request->password) {
