@@ -7,6 +7,7 @@ use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Models\SuratKeputusan;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\EmailNotificationController;
 
 class DashboardKabidController extends Controller
 {
@@ -47,7 +48,15 @@ class DashboardKabidController extends Controller
             'status' => 'Persetujuan Kadis'
         ]);
 
-        $this->sendMessageToKadis();
+        // $this->sendMessageToKadis();
+
+        $notification = new EmailNotificationController();
+
+        $users = User::where('role', 'kadis')->get();
+
+        foreach ($users as $user) {
+            $notification->sendEmail($user->id, "kabid telah mengirimkan surat keputusan!\nHarap melakukan verifikasi pada surat keputusan tersebut.");
+        }
 
         return to_route('kabid.verifikasi.surat.keputusan', $pengajuanID)->with('success', 'Berhasil menyetujui & mengirim surat keputusan ke Kadis');
     }
