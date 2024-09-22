@@ -13,6 +13,7 @@ use App\Models\SuratKesanggupan;
 use App\Models\RiwayatVerifikasi;
 use App\Http\Controllers\Controller;
 use App\Models\JadwalTinjauanLapangan;
+use App\Http\Controllers\EmailNotificationController;
 use App\Http\Controllers\Admin\Message\SendApprovedToPemohon;
 use App\Http\Controllers\Admin\Message\SendRevisiMessageToPemohon;
 
@@ -179,8 +180,12 @@ class PengajuanAdminController extends Controller
 
     public function goToJadwalTinjauanLapangan($pengajuanID)
     {
-        $sendRevisiMessageToPemohon = new SendRevisiMessageToPemohon();
-        $sendRevisiMessageToPemohon->__invoke($pengajuanID);
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findOrFail($pengajuanID);
+
+        $namaWebsite = env('APP_URL');
+
+        $notification = new EmailNotificationController();
+        $notification->sendEmail($pengajuan->user_id, "Admin telah menyetujui permohonan, dan telah membuat jadwal tinjauan lapangan.\nHarap melakukan pengecekan pada website $namaWebsite , untuk mengunduh jadwal tinjauan lapangan!");
 
         $pengajuan = Pengajuan::with('hasOneRiwayatPengajuan', 'hasOneRiwayatVerifikasi')->findorfail($pengajuanID);
 
@@ -250,10 +255,12 @@ class PengajuanAdminController extends Controller
                 'step' => 'Tinjauan Lapangan'
             ]);
 
-        $data = $jadwal->with('belongsToPengajuan.hasOnePemohon.hasOneProfile')->where('pengajuan_id', $request->pengajuan_id)->first();
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findOrFail($request->pengajuan_id);
 
-        $sendApprovedToPemohon = new SendApprovedToPemohon();
-        $sendApprovedToPemohon->__invoke($data);
+        $namaWebsite = env('APP_URL');
+
+        $notification = new EmailNotificationController();
+        $notification->sendEmail($pengajuan->user_id, "Admin telah menyetujui permohonan, dan telah membuat jadwal tinjauan lapangan.\nHarap melakukan pengecekan pada website $namaWebsite , untuk mengunduh jadwal tinjauan lapangan!");
 
         // selanjutnya membuat stepper untuk tinjauan lapangan bersama
         // dd("halaman jadwal tinjauan lapangan bersama");
@@ -374,7 +381,13 @@ class PengajuanAdminController extends Controller
             'step' => 'Menunggu Surat Keputusan'
         ]);
 
-        $this->sendMessageToPemohon($pengajuanID);
+        // $this->sendMessageToPemohon($pengajuanID);
+
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findOrFail($pengajuanID);
+
+        $notification = new EmailNotificationController();
+        $notification->sendEmail($pengajuan->user_id, 'Admin telah memverifikasi surat kesanggupan anda. Harap menunggu surat keputusan! Anda akan mendapat notifikasi jika surat keputusan telah dibuat.!');
+
 
         return to_route('admin.surat.keputusan', $pengajuanID)->with('success', 'Berhasil memverifikasi dan mengunggah');
     }
@@ -442,7 +455,20 @@ class PengajuanAdminController extends Controller
             'step' => 'Menunggu Approve Surat Keputusan'
         ]);
 
-        $this->sendMessageToKasi();
+        // $this->sendMessageToKasi();
+
+        $notification = new EmailNotificationController();
+
+        $users = User::where('role', 'kasi')->get();
+
+        foreach ($users as $user) {
+            $notification->sendEmail($user->id, 'Admin telah mengirimkan surat keputusan! Harap melakukan verifikasi pada surat keputusan tersebut.!');
+        }
+
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findOrFail($pengajuanID);
+
+        $notification = new EmailNotificationController();
+        $notification->sendEmail($pengajuan->user_id, 'Admin telah memverifikasi surat kesanggupan anda. Harap menunggu surat keputusan! Anda akan mendapat notifikasi jika surat keputusan telah dibuat.!');
 
         return to_route('admin.menunggu.approve.surat.keputusan', $pengajuanID)->with('success', 'Berhasil mengirim surat keputusan ke KASI');
     }

@@ -6,9 +6,10 @@ use App\Models\User;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Models\SuratKeputusan;
+use App\Models\RiwayatPengajuan;
 use App\Models\RiwayatVerifikasi;
 use App\Http\Controllers\Controller;
-use App\Models\RiwayatPengajuan;
+use App\Http\Controllers\EmailNotificationController;
 
 class DashboardKadisController extends Controller
 {
@@ -61,7 +62,19 @@ class DashboardKadisController extends Controller
             'step' => 'Selesai'
         ]);
 
-        $this->sendMessageToAll($pengajuanID);
+        // $this->sendMessageToAll($pengajuanID);
+
+        $users = User::where('role', 'admin')->get();
+        $notification = new EmailNotificationController();
+
+        foreach ($users as $user) {
+            $notification->sendEmail($user->id, "Surat keputusan telah disetujui dan permohonan anda telah disetujui.\nHarap mengunduh surat keputusan pada halaman permohonan!");
+        }
+
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findorfail($pengajuanID);
+
+        $notification->sendEmail($pengajuan->user_id, "Surat keputusan telah disetujui dan permohonan anda telah disetujui.\nHarap mengunduh surat keputusan pada halaman permohonan!");
+
 
         return to_route('kadis.verifikasi.surat.keputusan', $pengajuanID)->with('success', 'Berhasil Menyetujui Surat Keputusan');
     }

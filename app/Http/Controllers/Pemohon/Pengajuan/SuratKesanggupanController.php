@@ -7,10 +7,11 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
-use App\Models\SuratKesanggupan;
-use App\Http\Controllers\Controller;
 use App\Models\RiwayatPengajuan;
+use App\Models\SuratKesanggupan;
 use App\Models\RiwayatVerifikasi;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\EmailNotificationController;
 
 class SuratKesanggupanController extends Controller
 {
@@ -110,7 +111,14 @@ class SuratKesanggupanController extends Controller
             'step' => 'Menunggu Verifikasi Surat Kesanggupan'
         ]);
 
-        $this->sendMessageToAdmin($pengajuanID);
+        // $this->sendMessageToAdmin($pengajuanID);
+
+        $users = User::where('role', 'admin')->get();
+        $notification = new EmailNotificationController();
+
+        foreach ($users as $user) {
+            $notification->sendEmail($user->id, "Pemohon Telah Mengunggah Surat Kesanggupan, Harap Melakukan Verifikasi Surat Kesanggupan!\nJika surat kesanggupan tidak diverifikasi lebih dari 3 hari, maka pengajuan akan otomatis gagal");
+        }
 
         return to_route('pemohon.menunggu.verifikasi.surat.kesanggupan', $pengajuanID)->with('success', 'Berhasil mengunggah');
     }

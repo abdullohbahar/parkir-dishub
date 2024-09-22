@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\DokumenPengajuan;
 use App\Models\RiwayatPengajuan;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\EmailNotificationController;
 use PDF;
 
 class UploadDokumenPengajuanController extends Controller
@@ -74,7 +75,15 @@ class UploadDokumenPengajuanController extends Controller
             'step' => 'Menunggu Verifikasi Admin'
         ]);
 
-        $this->sendMessageToAdmin($pengajuanID);
+        $notification = new EmailNotificationController();
+
+        $users = User::where('role', 'admin')->get();
+
+        foreach ($users as $user) {
+            $notification->sendEmail($user->id, 'Pemohon Telah Mengajukan Permohonan Baru, Harap Melakukan Verifikasi Dokumen Permohonan!');
+        }
+
+        // $this->sendMessageToAdmin($pengajuanID);
 
         return to_route('pemohon.wait.verification.dokumen.pengajuan', $pengajuanID)->with('success', 'Harap Menunggu Admin Memverifikasi');
     }

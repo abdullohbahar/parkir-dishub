@@ -7,6 +7,7 @@ use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Models\DokumenPengajuan;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\EmailNotificationController;
 
 class VerifikasiDokumenController extends Controller
 {
@@ -60,7 +61,12 @@ class VerifikasiDokumenController extends Controller
                 ]);
         }
 
-        $this->sendRejectMessageToPemohon($request->pengajuan_id);
+        $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findOrFail($request->pengajuan_id);
+
+        $alasan = $pengajuan->hasOneDokumenPengajuan->alasan;
+
+        $notification = new EmailNotificationController();
+        $notification->sendEmail($pengajuan->user_id, "Admin Menolak Permohonan Anda, Dengan Alasan:\n$alasan\nHarap Melakukan Permohonan Ulang!");
 
         return redirect()->back()->with('success', 'Berhasil Menolak');
     }
