@@ -365,11 +365,17 @@
                         <tr>
                             <td colspan="2" class="text-center">
                                 KEPALA,
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
+                                @if (isset($qrcode))
+                                    <br>
+                                    <img src="{{ $qrcode }}" alt="QR Code">
+                                    <br>
+                                @else
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                @endif
                                 {{ $kadis->hasOneProfile?->nama }} <br>
                                 NIP: {{ $kadis->hasOneProfile?->nip }}
                             </td>

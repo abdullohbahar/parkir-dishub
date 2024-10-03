@@ -13,6 +13,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/socialite": "^5.12",
         "laravel/tinker": "^2.7",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "socialiteproviders/keycloak": "^5.3",
         "socialiteproviders/manager": "^4.5",
         "socialiteproviders/zoho": "^4.1",
