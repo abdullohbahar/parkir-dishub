@@ -21,6 +21,7 @@ use App\Http\Controllers\Pemohon\Pengajuan\SuratKesanggupanController;
 use App\Http\Controllers\Pemohon\Pengajuan\TinjauanLapanganController;
 use App\Http\Controllers\Pemohon\Pengajuan\UploadDokumenPengajuanController;
 use App\Http\Controllers\Pemohon\PengajuanPermohonanController;
+use App\Http\Controllers\PreviewSuratKeputusanController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Template\TemplateJadwalTinjauanLapangan;
 use App\Models\SuratKeputusan;
@@ -150,3 +151,4 @@ Route::get('profile/{id}', [ProfileController::class, 'index'])->name('profile.i
 Route::resource('profile', ProfileController::class)->only('edit', 'update', 'show');
 Route::get('download-pemberitahuan-jadwal-tinjauan-lapangan/{pengajuanID}', TemplateJadwalTinjauanLapangan::class)->name('download.pemberitahuan.jadwal.tinjauan');
 Route::get('surat-keputusan/{pengajuanID}', SuratKeputusanController::class)->name('surat.keputusan');
+Route::get('preview-surat-keputusan/{pengajuanID}', PreviewSuratKeputusanController::class)->name('preview.surat.keputusan');

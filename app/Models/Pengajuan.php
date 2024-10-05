@@ -71,4 +71,9 @@ class Pengajuan extends Model
     {
         return $this->hasOne(SuratKesanggupan::class);
     }
+
+    public function hasOneSuratKeputusan(): HasOne
+    {
+        return $this->hasOne(SuratKeputusan::class);
+    }
 }

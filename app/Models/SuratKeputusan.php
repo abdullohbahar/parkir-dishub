@@ -9,7 +9,7 @@ class SuratKeputusan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['pengajuan_id', 'status'];
+    protected $fillable = ['pengajuan_id', 'status', 'file'];
 
     public function belongsToPengajuan()
     {

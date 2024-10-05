@@ -24,7 +24,7 @@
         }
 
         body {
-            margin: 1.2cm 1.2cm 1.2cm 1.2cm;
+            margin: 1.2cm 1.2cm 2.5cm 1.2cm;
             font-family: "Times New Roman", Times, serif;
         }
 
@@ -81,10 +81,26 @@
         td {
             vertical-align: top;
         }
+
+        footer {
+            position: fixed;
+            left: 10px;
+            right: 0px;
+            bottom: 10px;
+            /* Tambahkan properti ini */
+            height: auto;
+            margin-bottom: 0px;
+        }
     </style>
 </head>
 
 <body>
+    @if (isset($bsre))
+        <!-- Footer yang muncul di setiap halaman -->
+        <footer>
+            <img src="data:image/jpeg;base64,{{ $bsre }}" style="width: 20%">
+        </footer>
+    @endif
     {{-- KOP --}}
     <div>
         <table style="width: 100%">
@@ -365,11 +381,17 @@
                         <tr>
                             <td colspan="2" class="text-center">
                                 KEPALA,
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
+                                @if (isset($qrcode))
+                                    <br>
+                                    <img src="{{ $qrcode }}" alt="QR Code">
+                                    <br>
+                                @else
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                @endif
                                 {{ $kadis->hasOneProfile?->nama }} <br>
                                 NIP: {{ $kadis->hasOneProfile?->nip }}
                             </td>
@@ -397,7 +419,6 @@
         Untuk dapat dipergunakan sebagaimana mestinya.
         </p>
     </div>
-
 </body>
 
 </html>
