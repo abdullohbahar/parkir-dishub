@@ -93,6 +93,9 @@ class DashboardKadisController extends Controller
         $aksaraPath = public_path('img/aksara-dishub.png');
         $encodeAksara = base64_encode(file_get_contents($aksaraPath));
 
+        $bsrePath = public_path('img/bsre.jpeg');
+        $encodeBsre = base64_encode(file_get_contents($bsrePath));
+
         $pengajuan = Pengajuan::with('hasOneJadwalTinjauan', 'hasOnePemohon.hasOneProfile')->findOrFail($pengajuanID);
 
         \Carbon\Carbon::setLocale('id');
@@ -127,7 +130,8 @@ class DashboardKadisController extends Controller
             'tanggalSurat' => $tanggalSurat,
             'kepada' => $kepada,
             'kadis' => $kadis,
-            'qrcode' => $qrcode
+            'qrcode' => $qrcode,
+            'bsre' => $encodeBsre
         ];
 
         $pdf = PDF::loadView('template.surat-keputusan', $data);

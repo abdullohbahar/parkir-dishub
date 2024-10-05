@@ -53,8 +53,15 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="col-12">
-                                            <iframe style="width: 100%; height: 700px;"
-                                                src="{{ route('surat.keputusan', $pengajuanID) }}" frameborder="0"></iframe>
+                                            @php
+                                                if ($suratKeputusan->file) {
+                                                    $route = route('preview.surat.keputusan', $pengajuanID);
+                                                } else {
+                                                    $route = route('surat.keputusan', $pengajuanID);
+                                                }
+                                            @endphp
+                                            <iframe style="width: 100%; height: 700px;" src="{{ $route }}"
+                                                frameborder="0"></iframe>
                                         </div>
                                     </div>
                                 </div>

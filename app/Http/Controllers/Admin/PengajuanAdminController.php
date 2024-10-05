@@ -56,7 +56,7 @@ class PengajuanAdminController extends Controller
                     if ($item->status != 'Input Data Pengajuan') {
                         $detailBtn = "<a href='/admin/permohonan/detail/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
                         if ($item->status == 'Selesai') {
-                            $verifikasiBtn = "<a href='/surat-keputusan/$item->id' target='_blank' class='btn btn-info btn-sm'>Surat Keputusan</a>";
+                            $verifikasiBtn = "<a href='/preview-surat-keputusan/{$item->id}' target='_blank' class='btn btn-info btn-sm'>Surat Keputusan</a>";
                         } else {
                             $verifikasiBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-warning btn-sm'>Aktivitas Permohonan</a>";
                         }
