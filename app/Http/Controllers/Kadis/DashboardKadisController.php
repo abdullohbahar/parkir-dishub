@@ -13,9 +13,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Http\Controllers\EmailNotificationController;
+use App\Models\TteLog;
 
 class DashboardKadisController extends Controller
 {
+    public $passphrase;
+
     public function index()
     {
         $suratKeputusan = new SuratKeputusan();
@@ -45,15 +48,29 @@ class DashboardKadisController extends Controller
         return view('kadis.surat-keputusan', $data);
     }
 
-    public function kirimSuratKeputusanKeKadis($pengajuanID)
+    public function kirimSuratKeputusanKeKadis(Request $request, $pengajuanID)
     {
+        $this->passphrase = $request->passphrase;
         $generatePDF = $this->generateSuratKeputusanPDF($pengajuanID);
+
+        if (!$generatePDF['success']) {
+            $response = json_decode($generatePDF['response']->body());
+
+            TteLog::create([
+                'parent_id' => $pengajuanID,
+                'parent_table' => 'surat_keputusans',
+                'response' => $generatePDF['response']->body()
+            ]);
+
+            return redirect()->back()->with('failed', $response->error);
+        }
+
 
         SuratKeputusan::updateorcreate([
             'pengajuan_id' => $pengajuanID
         ], [
             'status' => 'Selesai',
-            'file' => $generatePDF
+            'file' => $generatePDF['response']
         ]);
 
         Pengajuan::findorfail($pengajuanID)->update([
@@ -157,8 +174,10 @@ class DashboardKadisController extends Controller
     {
         $username = env("TTE_USERNAME");
         $password = env("TTE_PASSWORD");
-        $passphrase = env("TTE_PASSPHRASE");
+        $passphrase = $this->passphrase;
         $url = env("TTE_URL");
+
+        // dd($passphrase);
 
         $kadis = User::where('role', 'kadis')->first();
 
@@ -205,10 +224,16 @@ class DashboardKadisController extends Controller
             // Return atau lakukan sesuatu setelah file tersimpan, misal return path file
             // return response()->json(['success' => 'PDF signed and saved successfully', 'file_path' => $filePath]);
 
-            return 'file-uploads/signed-pdf/' . $signedFileName;
+            return [
+                'success' => true,
+                'response' => 'file-uploads/signed-pdf/' . $signedFileName
+            ];
         } else {
             // Jika request gagal, kembalikan respons error
-            return response()->json(['error' => 'Failed to sign PDF', 'status_code' => $response->status()], $response->status());
+            return [
+                'success' => false,
+                'response' => $response
+            ];
         }
     }
 
