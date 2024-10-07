@@ -56,13 +56,21 @@ class DashboardKadisController extends Controller
         if (!$generatePDF['success']) {
             $response = json_decode($generatePDF['response']->body());
 
+            // dd($response);
+
             TteLog::create([
                 'parent_id' => $pengajuanID,
                 'parent_table' => 'surat_keputusans',
                 'response' => $generatePDF['response']->body()
             ]);
 
-            return redirect()->back()->with('failed', $response->error);
+            // dd($response);
+
+            if ($generatePDF['status'] !== 500) {
+                return redirect()->back()->with('failed', $response->error);
+            } else {
+                return redirect()->back()->with('failed', 'Terjadi masalah saat memproses TTE');
+            }
         }
 
 
@@ -221,18 +229,19 @@ class DashboardKadisController extends Controller
                 unlink($file); // Menghapus file yang lama (yang dikirim ke API)
             }
 
-            // Return atau lakukan sesuatu setelah file tersimpan, misal return path file
-            // return response()->json(['success' => 'PDF signed and saved successfully', 'file_path' => $filePath]);
-
             return [
                 'success' => true,
-                'response' => 'file-uploads/signed-pdf/' . $signedFileName
+                'status' => $response->status(),
+                'response' => 'file-uploads/signed-pdf/' . $signedFileName,
+                'body' => $response->body()
             ];
         } else {
             // Jika request gagal, kembalikan respons error
             return [
                 'success' => false,
-                'response' => $response
+                'status' => $response->status(),
+                'response' => $response,
+                'body' => $response->body()
             ];
         }
     }

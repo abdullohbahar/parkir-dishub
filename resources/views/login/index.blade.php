@@ -162,6 +162,7 @@ License: For each use you must have a valid license purchased only from above li
                             <!--end::Submit button-->
                         </form>
                         <!--end::Form-->
+                        <img src="{{ asset('./img/bsre.jpeg') }}" class="w-50" alt="">
                     </div>
                     <!--end::Wrapper-->
                     <!--end::Footer-->
