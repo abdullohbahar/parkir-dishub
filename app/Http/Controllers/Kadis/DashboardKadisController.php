@@ -138,7 +138,7 @@ class DashboardKadisController extends Controller
             ->format('png')
             ->merge(public_path('img/kab-bantul.png'), 0.4, true) // Ubah ukuran logo menjadi lebih kecil
             ->errorCorrection('H') // Tingkat koreksi kesalahan tertinggi
-            ->generate(route('preview.surat.persetujuan', $pengajuanID));
+            ->generate(route('preview.surat.keputusan', $pengajuanID));
 
         // Encode QR Code ke dalam Base64
         $base64 = base64_encode($qrcode);
