@@ -18,6 +18,8 @@ class PreviewSuratKeputusanController extends Controller
         // Cari data surat keputusan berdasarkan pengajuanID
         $suratKeputusan = SuratKeputusan::where('pengajuan_id', $pengajuanID)->first();
 
+        dd($suratKeputusan);
+
         // Cek apakah data ditemukan dan file path ada
         if ($suratKeputusan && file_exists(public_path($suratKeputusan->file))) {
             // Menampilkan file langsung di browser
