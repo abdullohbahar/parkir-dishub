@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Http;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Http\Controllers\EmailNotificationController;
 use App\Models\TteLog;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardKadisController extends Controller
 {
@@ -50,35 +51,14 @@ class DashboardKadisController extends Controller
 
     public function kirimSuratKeputusanKeKadis(Request $request, $pengajuanID)
     {
-        $this->passphrase = $request->passphrase;
-        $generatePDF = $this->generateSuratKeputusanPDF($pengajuanID);
-
-        if (!$generatePDF['success']) {
-            $response = json_decode($generatePDF['response']->body());
-
-            // dd($response);
-
-            TteLog::create([
-                'parent_id' => $pengajuanID,
-                'parent_table' => 'surat_keputusans',
-                'response' => $generatePDF['response']->body()
-            ]);
-
-            // dd($response);
-
-            if ($generatePDF['status'] !== 500) {
-                return redirect()->back()->with('failed', $response->error);
-            } else {
-                return redirect()->back()->with('failed', 'Terjadi masalah saat memproses TTE');
-            }
-        }
-
+        // Generate PDF tanpa TTE
+        $pdfPath = $this->generateSuratKeputusanPDF($pengajuanID);
 
         SuratKeputusan::updateorcreate([
             'pengajuan_id' => $pengajuanID
         ], [
             'status' => 'Selesai',
-            'file' => $generatePDF['response']
+            'file' => $pdfPath
         ]);
 
         Pengajuan::findorfail($pengajuanID)->update([
@@ -105,7 +85,6 @@ class DashboardKadisController extends Controller
         $pengajuan = Pengajuan::with('hasOnePemohon.hasOneProfile')->findorfail($pengajuanID);
 
         $notification->sendEmail($pengajuan->user_id, "Surat keputusan telah disetujui dan permohonan anda telah disetujui.\nHarap mengunduh surat keputusan pada halaman permohonan!");
-
 
         return to_route('kadis.verifikasi.surat.keputusan', $pengajuanID)->with('success', 'Berhasil Menyetujui Surat Keputusan');
     }
@@ -161,89 +140,18 @@ class DashboardKadisController extends Controller
 
         $pdf = PDF::loadView('template.surat-keputusan', $data);
 
-        // Tentukan nama file dan lokasi penyimpanan di folder public
-        $fileDir = public_path('file-uploads/pdf/');
+        // Gunakan Storage laravel untuk menghindari masalah permission
         $fileName = 'surat_keputusan_' . $pengajuanID . '.pdf';
-        $filePath = $fileDir . $fileName;
+        $filePath = 'pdf/' . $fileName;
 
-        // Periksa apakah folder sudah ada, jika tidak, buat folder
-        if (!file_exists($fileDir)) {
-            mkdir($fileDir, 0755, true);
-        }
+        // Pastikan direktori ada
+        Storage::disk('public')->makeDirectory('pdf');
 
         // Simpan file PDF
-        $pdf->save($filePath);
+        Storage::disk('public')->put($filePath, $pdf->output());
 
-        return $this->signTte($filePath, $fileName);
-        // return $filePath;
-    }
-
-    public function signTte($file, $filename)
-    {
-        $username = env("TTE_USERNAME");
-        $password = env("TTE_PASSWORD");
-        $passphrase = $this->passphrase;
-        $url = env("TTE_URL");
-
-        // dd($passphrase);
-
-        $kadis = User::where('role', 'kadis')->first();
-
-        $data = [
-            'nik' => $kadis->hasOneProfile->no_ktp,
-            'passphrase' => $passphrase,
-            'tampilan' => 'invisible',
-            'location' => 'Bantul'
-        ];
-
-        $response = Http::withBasicAuth($username, $password)
-            ->attach(
-                'file',
-                file_get_contents($file),
-                $filename
-            )
-            ->post($url, $data);
-
-        // dd($data, $response);
-
-        // Cek apakah response sukses
-        if ($response->successful()) {
-            // Ambil konten file PDF yang diterima dari API
-            $pdfContent = $response->body(); // Mengambil respons binary dari API
-
-            // Tentukan lokasi penyimpanan file PDF di folder public
-            $fileDir = public_path('file-uploads/signed-pdf/');
-            $signedFileName = 'signed_' . $filename;
-            $filePath = $fileDir . $signedFileName;
-
-            // Periksa apakah folder sudah ada, jika tidak, buat folder
-            if (!file_exists($fileDir)) {
-                mkdir($fileDir, 0755, true);
-            }
-
-            // Simpan file PDF ke folder public
-            file_put_contents($filePath, $pdfContent);
-
-            // Hapus file asli setelah file baru berhasil disimpan
-            if (file_exists($file)) {
-                unlink($file); // Menghapus file yang lama (yang dikirim ke API)
-            }
-
-            return [
-                'success' => true,
-                'status' => $response->status(),
-                'response' => 'file-uploads/signed-pdf/' . $signedFileName,
-                'body' => $response->body()
-            ];
-        } else {
-            // Jika request gagal, kembalikan respons error
-            return [
-                'success' => false,
-                'status' => $response->status(),
-                'response' => $response,
-                'body' => $response->body()
-            ];
-        }
+        // Kembalikan path untuk disimpan di database
+        return 'public/' . $filePath;
     }
 
     public function sendMessageToAll($pengajuanID)
