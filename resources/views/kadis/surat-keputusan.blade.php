@@ -54,6 +54,8 @@
                                     <div class="col-12">
                                         <div class="col-12">
                                             @php
+                                                dd($suratKeputusan);
+
                                                 if ($suratKeputusan->file) {
                                                     $route = route('preview.surat.keputusan', $pengajuanID);
                                                 } else {
