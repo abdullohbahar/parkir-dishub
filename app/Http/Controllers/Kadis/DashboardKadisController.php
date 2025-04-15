@@ -61,7 +61,7 @@ class DashboardKadisController extends Controller
             'file' => $pdfPath
         ]);
 
-        dd($suratKeputusan, $pdfPath);
+        // dd($suratKeputusan, $pdfPath);
 
         Pengajuan::findorfail($pengajuanID)->update([
             'status' => 'Selesai'
