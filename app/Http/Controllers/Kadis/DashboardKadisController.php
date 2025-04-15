@@ -54,14 +54,14 @@ class DashboardKadisController extends Controller
         // Generate PDF tanpa TTE
         $pdfPath = $this->generateSuratKeputusanPDF($pengajuanID);
 
-        dd($pdfPath);
-
-        SuratKeputusan::updateorcreate([
+        $suratKeputusan = SuratKeputusan::updateorcreate([
             'pengajuan_id' => $pengajuanID
         ], [
             'status' => 'Selesai',
             'file' => $pdfPath
         ]);
+
+        dd($suratKeputusan, $pdfPath);
 
         Pengajuan::findorfail($pengajuanID)->update([
             'status' => 'Selesai'
