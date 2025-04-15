@@ -65,26 +65,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- @if ($suratKeputusan->status == 'Persetujuan Kadis') --}}
-                                <form action="{{ route('kadis.kirim.surat.keputusan.kekadis', $pengajuan->id) }}"
-                                    method="POST" id="myForm" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="row mt-4">
-                                        <h2>Setujui dan Proses TTE</h2>
+                                @if ($suratKeputusan->status == 'Persetujuan Kadis')
+                                    <form action="{{ route('kadis.kirim.surat.keputusan.kekadis', $pengajuan->id) }}"
+                                        method="POST" id="myForm" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="row mt-4">
+                                            <h2>Setujui dan Proses TTE</h2>
 
-                                        <div class="col-12">
-                                            <label for=""><b>Passphrase</b></label>
-                                            <input type="password" name="passphrase" class="form-control" required
-                                                id="">
+                                            <div class="col-12">
+                                                <label for=""><b>Passphrase</b></label>
+                                                <input type="password" name="passphrase" class="form-control" required
+                                                    id="">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row mt-5">
-                                        <div class="col-12 mt-3">
-                                            <button type="submit" class="btn btn-success mt-5">Setujui & Kirim</button>
+                                        <div class="row mt-5">
+                                            <div class="col-12 mt-3">
+                                                <button type="submit" class="btn btn-success mt-5">Setujui & Kirim</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
-                                {{-- @endif --}}
+                                    </form>
+                                @endif
                             </div>
                         </div>
                     </div>
