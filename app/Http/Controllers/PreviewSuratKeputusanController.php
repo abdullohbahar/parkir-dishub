@@ -18,12 +18,10 @@ class PreviewSuratKeputusanController extends Controller
         // Cari data surat keputusan berdasarkan pengajuanID
         $suratKeputusan = SuratKeputusan::where('pengajuan_id', $pengajuanID)->first();
 
-        dd($suratKeputusan);
-
+        return response()->file(public_path($suratKeputusan->file));
         // Cek apakah data ditemukan dan file path ada
         if ($suratKeputusan && file_exists(public_path($suratKeputusan->file))) {
             // Menampilkan file langsung di browser
-            return response()->file(public_path($suratKeputusan->file));
         } else {
             // Jika file tidak ditemukan atau data tidak ada, kembalikan pesan error
             return response()->json(['error' => 'File not found or record does not exist.'], 404);
