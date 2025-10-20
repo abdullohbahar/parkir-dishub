@@ -112,7 +112,8 @@ class AuthController extends Controller
             // The URL the user is redirected to after logout.
             $redirectUri = env('APP_URL');
 
-            return redirect(Socialite::driver('keycloak')->getLogoutUrl($redirectUri, env('KEYCLOAK_CLIENT_ID')));
+            //return redirect(Socialite::driver('keycloak')->getLogoutUrl($redirectUri, env('KEYCLOAK_CLIENT_ID')));
+            return to_route('login');
         } else {
             return to_route('login');
         }
