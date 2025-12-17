@@ -21,6 +21,10 @@ class CheckProfileMiddleware
 
         $user = User::with('hasOneProfile')->where('id', $userID)->first();
 
+        if (auth()->user()->role === 'admin') {
+            return $next($request);
+        }
+
         if ($user->hasOneProfile?->no_telepon == null) {
             return to_route('profile.edit', $userID);
         }
