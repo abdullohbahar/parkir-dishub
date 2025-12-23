@@ -21,7 +21,7 @@ class CheckProfileMiddleware
 
         $user = User::with('hasOneProfile')->where('id', $userID)->first();
 
-        if (auth()->user()->role === 'admin') {
+        if (auth()->user()->role === 'admin' || auth()->user()->role === 'kasi' || auth()->user()->role === 'kabid' || auth()->user()->role === 'kadis') {
             return $next($request);
         }
 
