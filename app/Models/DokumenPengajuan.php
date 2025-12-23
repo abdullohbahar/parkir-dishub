@@ -18,6 +18,17 @@ class DokumenPengajuan extends Model
         'file'
     ];
 
+    public static function getNamaDokumen()
+    {
+        return [
+            'Surat Permohonan',
+            'KTP',
+            'Pas Foto',
+            'Denah',
+            'Rekom'
+        ];
+    }
+
     protected function file(): Attribute
     {
         return Attribute::make(

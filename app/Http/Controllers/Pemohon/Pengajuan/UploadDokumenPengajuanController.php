@@ -67,6 +67,21 @@ class UploadDokumenPengajuanController extends Controller
     {
         $pengajuan = Pengajuan::find($pengajuanID);
 
+        if ($pengajuan->hasManyDokumenPengajuan->isEmpty()) {
+            return redirect()->back()->with('terminated', 'Harap melakukan upload semua dokumen');
+        }
+
+        $arrNamaDokumen = collect(DokumenPengajuan::getNamaDokumen())
+            ->diff($pengajuan->hasManyDokumenPengajuan->pluck('nama_dokumen'))
+            ->values()
+            ->all();
+
+        if (!empty($arrNamaDokumen)) {
+            $string = implode(', ', $arrNamaDokumen);
+
+            return redirect()->back()->with('terminated', "Harap melakukan upload dokumen {$string}");
+        }
+
         $pengajuan->update([
             'status' => 'Proses Verifikasi Admin'
         ]);
