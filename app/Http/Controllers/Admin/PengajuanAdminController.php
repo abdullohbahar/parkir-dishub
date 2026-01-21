@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use PDF;
 use DataTables;
 use App\Models\User;
 use App\Models\Pengajuan;
@@ -12,6 +13,7 @@ use App\Models\RiwayatPengajuan;
 use App\Models\SuratKesanggupan;
 use App\Models\RiwayatVerifikasi;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use App\Models\JadwalTinjauanLapangan;
 use App\Http\Controllers\EmailNotificationController;
 use App\Http\Controllers\Admin\Message\SendApprovedToPemohon;
@@ -471,6 +473,139 @@ class PengajuanAdminController extends Controller
         $notification->sendEmail($pengajuan->user_id, 'Admin telah memverifikasi surat kesanggupan anda. Harap menunggu surat keputusan! Anda akan mendapat notifikasi jika surat keputusan telah dibuat.!');
 
         return to_route('admin.menunggu.approve.surat.keputusan', $pengajuanID)->with('success', 'Berhasil mengirim surat keputusan ke KASI');
+    }
+
+    public function kirimSuratKeputusanKeBantara($pengajuanId)
+    {
+        // dd(auth()->user()->hasOneProfile->no_ktp);
+
+        $logoPath = public_path('img/kab-bantul.png');
+        $encodeLogo = base64_encode(file_get_contents($logoPath));
+
+        $aksaraPath = public_path('img/aksara-dishub.png');
+        $encodeAksara = base64_encode(file_get_contents($aksaraPath));
+
+        $pengajuan = Pengajuan::with('hasOneJadwalTinjauan', 'hasOnePemohon.hasOneProfile')->findOrFail($pengajuanId);
+
+        \Carbon\Carbon::setLocale('id');
+        $tanggal = \Carbon\Carbon::parse($pengajuan->hasOneJadwalTinjauan->tanggal)->translatedFormat('L F Y');
+        $hari = \Carbon\Carbon::parse($pengajuan->hasOneJadwalTinjauan->tanggal)->translatedFormat('l');
+        $tanggalSurat = \Carbon\Carbon::parse($pengajuan->hasOneJadwalTinjauan->created_at)->translatedFormat('L F Y');
+
+        $kepada = [];
+        $kepada['pemohon'] = $pengajuan->hasOnePemohon->hasOneProfile->nama;
+
+        $kadis = User::with('hasOneProfile')->where('role', 'kadis')->first();
+
+        $data = [
+            'aksara' => $encodeAksara,
+            'logo' => $encodeLogo,
+            'pengajuan' => $pengajuan,
+            'tanggal' => $tanggal,
+            'hari' => $hari,
+            'tanggalSurat' => $tanggalSurat,
+            'kepada' => $kepada,
+            'kadis' => $kadis
+        ];
+
+        $pdf = PDF::loadView('template.surat-keputusan', $data);
+
+        $baseUrl = env('BANTARA_BASE_URL');
+        $secretKey = env('BANTARA_SECRET_KEY');
+
+        // Generate callback URL
+        $callbackUrl = route('callback.bantara');
+
+        $response = Http::withToken($secretKey)
+            ->attach(
+                'file',
+                $pdf->output(),
+                'document.pdf'
+            )
+            ->post($baseUrl . '/tte/documents', [
+                'title'         => 'Surat Keputusan',
+                'description'   => 'Surat Keputusan',
+                'signer_nik'    => env('BANTARA_NIK'),
+                'callback_url'  => $callbackUrl,
+                'callback_key'  => env('BANTARA_CALLBACK_KEY'),
+                'with_footer'   => false,
+            ]);
+
+        // Cek response
+        if ($response->successful()) {
+            $responseData = $response->json();
+
+            // Simpan bantara_document_id dari response
+            if (isset($responseData['id'])) {
+                $pengajuan->update([
+                    'bantara_document_id' => $responseData['id'],
+                    'status_surat_keputusan' => 'uploaded'
+                ]);
+
+                return redirect()->back()->with('success', 'Surat keputusan berhasil dikirim ke BANTARA untuk ditandatangani secara elektronik');
+            }
+        }
+
+        // Jika gagal
+        return redirect()->back()->with('failed', 'Gagal mengirim surat keputusan ke BANTARA: ' . $response->body());
+    }
+
+    public function callbackBantara(Request $request)
+    {
+        // Validate callback key jika ada
+        $callbackKey = env('BANTARA_CALLBACK_KEY');
+        if ($callbackKey) {
+            $receivedKey = $request->header('X-Callback-Key');
+            if ($receivedKey !== $callbackKey) {
+                \Log::warning('Invalid BANTARA callback key');
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+        }
+
+        // Ambil document ID dari request
+        $documentId = $request->input('id');
+
+        if (!$documentId) {
+            \Log::warning('BANTARA callback missing document ID');
+            return response()->json(['error' => 'Missing document ID'], 400);
+        }
+
+        // Cari pengajuan berdasarkan bantara_document_id
+        $pengajuan = Pengajuan::where('bantara_document_id', $documentId)->first();
+
+        if (!$pengajuan) {
+            \Log::warning("Pengajuan with bantara_document_id $documentId not found");
+            return response()->json(['error' => 'Document not found'], 404);
+        }
+
+        // Cek apakah ada file yang dikirim (signed document)
+        if ($request->hasFile('file')) {
+            // Simpan file surat keputusan yang sudah ditandatangani
+            $file = $request->file('file');
+            $filename = time() . "-Surat-Keputusan-Signed." . $file->getClientOriginalExtension();
+            $location = 'file-uploads/Surat Keputusan/' . $pengajuan->id . '/';
+            $filepath = $location . $filename;
+            $file->storeAs('public/' . $location, $filename, 'public');
+
+            // Update pengajuan
+            $pengajuan->update([
+                'surat_keputusan' => $filepath,
+                'status_surat_keputusan' => 'signed'
+            ]);
+
+            \Log::info("BANTARA: Document $documentId successfully signed for pengajuan {$pengajuan->id}");
+
+            return response()->json(['success' => true]);
+        } else {
+            // Jika tidak ada file, berarti proses TTE gagal
+            $pengajuan->update([
+                'status_surat_keputusan' => 'failed'
+            ]);
+
+            \Log::error("BANTARA: Document $documentId signing failed for pengajuan {$pengajuan->id}");
+
+            return response()->json(['error' => 'Signing failed'], 422);
+        }
     }
 
     public function sendMessageToKasi()

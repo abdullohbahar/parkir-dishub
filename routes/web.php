@@ -76,6 +76,7 @@ Route::prefix('admin')->middleware(['admin', 'check.profile'])->group(function (
         Route::post('approve-surat-kesanggupan/{pengajuanID}', [PengajuanAdminController::class, 'approveSuratKesanggupan'])->name('admin.approve.surat.kesanggupan');
         Route::get('membuat-surat-keputusan/{pengajuanID}', [PengajuanAdminController::class, 'suratKeputusan'])->name('admin.surat.keputusan');
         Route::post('kirim-surat-keputusan-ke-kasi/{pengajuanID}', [PengajuanAdminController::class, 'kirimSuratKeputusanKeKasi'])->name('admin.kirim.surat.keputusan.kekasi');
+        Route::post('kirim-surat-keputusan-ke-bantara/{pengajuanID}', [PengajuanAdminController::class, 'kirimSuratKeputusanKeBantara'])->name('admin.kirim.surat.keputusan.kebantara');
         Route::get('menunggu-approve-surat-keputusan/{pengajuanID}', [PengajuanAdminController::class, 'menungguApproveSuratKeputusan'])->name('admin.menunggu.approve.surat.keputusan');
     });
 });
@@ -152,3 +153,6 @@ Route::resource('profile', ProfileController::class)->only('edit', 'update', 'sh
 Route::get('download-pemberitahuan-jadwal-tinjauan-lapangan/{pengajuanID}', TemplateJadwalTinjauanLapangan::class)->name('download.pemberitahuan.jadwal.tinjauan');
 Route::get('surat-keputusan/{pengajuanID}', SuratKeputusanController::class)->name('surat.keputusan');
 Route::get('preview-surat-keputusan/{pengajuanID}', PreviewSuratKeputusanController::class)->name('preview.surat.keputusan');
+
+// Callback BANTARA TTE
+Route::post('/callback/bantara', [PengajuanAdminController::class, 'callbackBantara'])->name('callback.bantara');

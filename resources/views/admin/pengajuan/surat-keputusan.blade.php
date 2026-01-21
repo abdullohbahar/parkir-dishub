@@ -61,12 +61,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form action="{{ route('admin.kirim.surat.keputusan.kekasi', $pengajuan->id) }}"
+                                <form action="{{ route('admin.kirim.surat.keputusan.kebantara', $pengajuan->id) }}"
                                     method="POST" id="myForm" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row mt-5">
                                         <div class="col-12 mt-5">
-                                            <h2>Kirim Surat Keputusan Ke E surat</h2>
+                                            <h2>Kirim Surat Keputusan Ke Bantara</h2>
                                             <button type="submit" class="btn btn-success mt-5">Kirim</button>
                                         </div>
                                     </div>
