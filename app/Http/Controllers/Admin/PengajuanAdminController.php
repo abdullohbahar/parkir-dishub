@@ -59,6 +59,8 @@ class PengajuanAdminController extends Controller
                         $detailBtn = "<a href='/admin/permohonan/detail/$item->id' class='btn btn-primary btn-sm'>Detail</a>";
                         if ($item->status == 'Selesai') {
                             $verifikasiBtn = "<a href='/preview-surat-keputusan/{$item->id}' target='_blank' class='btn btn-info btn-sm'>Surat Keputusan</a>";
+                        } else if ($item->bantara_document_id) {
+                            $verifikasiBtn = "<a href='/get-signed-document-from-bantara/{$item->id}' target='_blank' class='btn btn-info btn-sm'>Surat Keputusan</a>";
                         } else {
                             $verifikasiBtn = "<a href='/admin/permohonan/verifikasi-dokumen/$item->id' class='btn btn-warning btn-sm'>Aktivitas Permohonan</a>";
                         }
@@ -536,13 +538,23 @@ class PengajuanAdminController extends Controller
             $responseData = $response->json();
 
             // Simpan bantara_document_id dari response
-            if (isset($responseData['id'])) {
+            if (isset($responseData['document_id'])) {
                 $pengajuan->update([
-                    'bantara_document_id' => $responseData['id'],
+                    'bantara_document_id' => $responseData['document_id'],
                     'status_surat_keputusan' => 'uploaded'
                 ]);
 
-                return redirect()->back()->with('success', 'Surat keputusan berhasil dikirim ke BANTARA untuk ditandatangani secara elektronik');
+                RiwayatVerifikasi::where('pengajuan_id', $pengajuanId)
+                    ->update([
+                        'step' => 'Selesai'
+                    ]);
+
+                RiwayatPengajuan::where('pengajuan_id', $pengajuanId)
+                    ->update([
+                        'step' => 'Selesai'
+                    ]);
+
+                return to_route('admin.data.permohonan')->with('success', 'Surat keputusan berhasil dikirim ke BANTARA untuk ditandatangani secara elektronik');
             }
         }
 
@@ -644,18 +656,9 @@ class PengajuanAdminController extends Controller
             \Log::info("BANTARA: Successfully retrieved signed document for pengajuan {$pengajuan->id}");
 
             return redirect()->back()->with('success', 'Surat keputusan berhasil diambil dari BANTARA');
-        } elseif ($response->status() === 404) {
-            \Log::warning("BANTARA: Document not found for pengajuan {$pengajuan->id}");
-            return redirect()->back()->with('failed', 'Dokumen tidak ditemukan di BANTARA');
-        } elseif ($response->status() === 422) {
-            \Log::info("BANTARA: Document not yet signed for pengajuan {$pengajuan->id}");
-            return redirect()->back()->with('failed', 'Dokumen belum ditandatangani. Silakan tunggu proses TTE selesai.');
-        } elseif ($response->status() === 403) {
-            \Log::error("BANTARA: Access denied for pengajuan {$pengajuan->id}");
-            return redirect()->back()->with('failed', 'Akses ditolak. Periksa kredensial BANTARA.');
         } else {
             \Log::error("BANTARA: Unknown error for pengajuan {$pengajuan->id} - Status: " . $response->status());
-            return redirect()->back()->with('failed', 'Terjadi kesalahan: ' . $response->body());
+            return redirect()->back()->with('failed', $response->json('message'));
         }
     }
 

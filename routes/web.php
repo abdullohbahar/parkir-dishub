@@ -77,7 +77,6 @@ Route::prefix('admin')->middleware(['admin', 'check.profile'])->group(function (
         Route::get('membuat-surat-keputusan/{pengajuanID}', [PengajuanAdminController::class, 'suratKeputusan'])->name('admin.surat.keputusan');
         Route::post('kirim-surat-keputusan-ke-kasi/{pengajuanID}', [PengajuanAdminController::class, 'kirimSuratKeputusanKeKasi'])->name('admin.kirim.surat.keputusan.kekasi');
         Route::post('kirim-surat-keputusan-ke-bantara/{pengajuanID}', [PengajuanAdminController::class, 'kirimSuratKeputusanKeBantara'])->name('admin.kirim.surat.keputusan.kebantara');
-        Route::get('get-signed-document-from-bantara/{pengajuanID}', [PengajuanAdminController::class, 'getSignedDocumentFromBantara'])->name('admin.get.signed.document.from.bantara');
         Route::get('menunggu-approve-surat-keputusan/{pengajuanID}', [PengajuanAdminController::class, 'menungguApproveSuratKeputusan'])->name('admin.menunggu.approve.surat.keputusan');
     });
 });
@@ -157,3 +156,4 @@ Route::get('preview-surat-keputusan/{pengajuanID}', PreviewSuratKeputusanControl
 
 // Callback BANTARA TTE
 Route::post('/callback/bantara', [PengajuanAdminController::class, 'callbackBantara'])->name('callback.bantara');
+Route::get('get-signed-document-from-bantara/{pengajuanID}', [PengajuanAdminController::class, 'getSignedDocumentFromBantara'])->name('admin.get.signed.document.from.bantara');
