@@ -608,6 +608,57 @@ class PengajuanAdminController extends Controller
         }
     }
 
+    public function getSignedDocumentFromBantara($pengajuanId)
+    {
+        $pengajuan = Pengajuan::findOrFail($pengajuanId);
+
+        // Cek apakah ada bantara_document_id
+        if (!$pengajuan->bantara_document_id) {
+            return redirect()->back()->with('failed', 'Document ID BANTARA tidak ditemukan. Silakan kirim surat keputusan ke BANTARA terlebih dahulu.');
+        }
+
+        $baseUrl = env('BANTARA_BASE_URL');
+        $secretKey = env('BANTARA_SECRET_KEY');
+
+        // Request ke BANTARA untuk mendapatkan signed document
+        $response = Http::withToken($secretKey)
+            ->get($baseUrl . '/tte/signeddocument/' . $pengajuan->bantara_document_id);
+
+        // Handle response berdasarkan status code
+        if ($response->status() === 200) {
+            // Success - simpan file PDF
+            $pdfContent = $response->body();
+            $filename = time() . "-Surat-Keputusan-Signed.pdf";
+            $location = 'file-uploads/Surat Keputusan/' . $pengajuan->id . '/';
+            $filepath = $location . $filename;
+
+            // Simpan file
+            \Storage::disk('public')->put($location . $filename, $pdfContent);
+
+            // Update pengajuan
+            $pengajuan->update([
+                'surat_keputusan' => $filepath,
+                'status_surat_keputusan' => 'signed'
+            ]);
+
+            \Log::info("BANTARA: Successfully retrieved signed document for pengajuan {$pengajuan->id}");
+
+            return redirect()->back()->with('success', 'Surat keputusan berhasil diambil dari BANTARA');
+        } elseif ($response->status() === 404) {
+            \Log::warning("BANTARA: Document not found for pengajuan {$pengajuan->id}");
+            return redirect()->back()->with('failed', 'Dokumen tidak ditemukan di BANTARA');
+        } elseif ($response->status() === 422) {
+            \Log::info("BANTARA: Document not yet signed for pengajuan {$pengajuan->id}");
+            return redirect()->back()->with('failed', 'Dokumen belum ditandatangani. Silakan tunggu proses TTE selesai.');
+        } elseif ($response->status() === 403) {
+            \Log::error("BANTARA: Access denied for pengajuan {$pengajuan->id}");
+            return redirect()->back()->with('failed', 'Akses ditolak. Periksa kredensial BANTARA.');
+        } else {
+            \Log::error("BANTARA: Unknown error for pengajuan {$pengajuan->id} - Status: " . $response->status());
+            return redirect()->back()->with('failed', 'Terjadi kesalahan: ' . $response->body());
+        }
+    }
+
     public function sendMessageToKasi()
     {
         $kasi = User::with('hasOneProfile')->where('role', 'kasi')->first();
